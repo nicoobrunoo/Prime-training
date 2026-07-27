@@ -419,6 +419,136 @@ body.compact .section{padding:13px}body.compact .card{border-radius:20px}body.co
 }
 </style>
 
+
+<style id="primeCloudWorkoutStyles">
+/* Supabase es la única fuente de persistencia */
+.cloud-only-note{
+  display:flex;align-items:center;gap:7px;padding:8px 10px;border-radius:12px;
+  border:1px solid rgba(34,197,94,.24);background:rgba(34,197,94,.07);
+  color:#7ce78d;font-size:.67rem
+}
+
+/* Entrenamiento mobile-first */
+#workoutPage{max-width:720px;margin:0 auto}
+#workoutPage .focus-header{
+  margin:-14px -12px 12px;padding:10px 12px 13px;
+  border-bottom:1px solid #203a50;background:rgba(6,15,25,.96);
+  box-shadow:0 10px 30px rgba(0,0,0,.22)
+}
+.workout-mobile-progress{
+  height:7px;border-radius:999px;overflow:hidden;background:#203447;margin-top:10px
+}
+.workout-mobile-progress div{
+  height:100%;border-radius:inherit;background:linear-gradient(90deg,#8b5cf6,#d946ef);
+  transition:width .35s cubic-bezier(.2,.8,.25,1)
+}
+.exercise-pager{
+  display:flex;gap:7px;overflow-x:auto;padding:2px 1px 11px;scrollbar-width:none;
+  scroll-snap-type:x proximity
+}
+.exercise-pager::-webkit-scrollbar{display:none}
+.exercise-pill{
+  flex:0 0 auto;min-width:42px;height:42px;border-radius:14px;border:1px solid #29445a;
+  background:#112437;color:#879aaa;font-weight:950;display:grid;place-items:center;
+  scroll-snap-align:center;transition:.2s ease
+}
+.exercise-pill.active{
+  color:#fff;border-color:#956dff;background:linear-gradient(135deg,#7045e8,#a52ee7);
+  transform:translateY(-2px);box-shadow:0 8px 24px rgba(139,92,246,.27)
+}
+.exercise-pill.done{color:#6ce77e;border-color:rgba(34,197,94,.42);background:rgba(34,197,94,.1)}
+.mobile-exercise-card{
+  padding:16px;border-radius:26px;border:1px solid #29455c;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(139,92,246,.13),transparent 35%),
+    linear-gradient(180deg,#12263a,#0c1b2a);
+  box-shadow:0 22px 55px rgba(0,0,0,.34);
+  animation:mobileExerciseIn .3s cubic-bezier(.2,.8,.25,1)
+}
+.mobile-exercise-title{font-size:1.3rem;font-weight:950;letter-spacing:-.025em}
+.mobile-exercise-meta{color:#8fa5b8;font-size:.75rem;margin-top:5px;line-height:1.4}
+.mobile-set-list{display:grid;gap:9px;margin-top:17px}
+.mobile-set{
+  display:grid;grid-template-columns:42px minmax(0,1fr) minmax(0,1fr) 52px;
+  gap:7px;align-items:center;padding:9px;border-radius:18px;
+  border:1px solid #29445a;background:#0f2131;transition:.22s ease
+}
+.mobile-set.completed{
+  border-color:rgba(34,197,94,.42);background:rgba(34,197,94,.075);
+  transform:scale(.995)
+}
+.mobile-set-number{
+  width:38px;height:38px;border-radius:13px;background:#182c40;color:#9eb1c1;
+  display:grid;place-items:center;font-weight:950
+}
+.mobile-input-wrap{position:relative}
+.mobile-input-wrap input{
+  width:100%;height:52px;padding:18px 7px 5px;border-radius:14px;text-align:center;
+  border:1px solid #2d4a61;background:#091a28;color:#fff;font-size:1.05rem;font-weight:900;outline:none
+}
+.mobile-input-wrap input:focus{border-color:#956dff;box-shadow:0 0 0 3px rgba(139,92,246,.13)}
+.mobile-input-wrap label{
+  position:absolute;left:0;right:0;top:5px;text-align:center;color:#6f8799;font-size:.55rem;
+  pointer-events:none;text-transform:uppercase;letter-spacing:.05em
+}
+.mobile-check{
+  width:50px;height:50px;border-radius:16px;border:1px solid #35536c;
+  background:#152b3e;color:#7690a4;display:grid;place-items:center;
+  transition:transform .18s ease,background .22s ease,border-color .22s ease,color .22s ease
+}
+.mobile-check svg{width:25px;height:25px;stroke-width:2.3}
+.mobile-check:active{transform:scale(.88)}
+.mobile-check.done{
+  color:#fff;border-color:#45d45e;background:linear-gradient(135deg,#16a34a,#4ade80);
+  box-shadow:0 8px 22px rgba(34,197,94,.28);animation:mobileCheck .35s cubic-bezier(.2,.9,.3,1)
+}
+.mobile-tools{display:flex;gap:7px;overflow-x:auto;padding:13px 0 2px;scrollbar-width:none}
+.mobile-tools::-webkit-scrollbar{display:none}
+.mobile-tool{
+  flex:0 0 auto;border:1px solid #2e495f;background:#13283a;color:#9fb0be;
+  border-radius:999px;padding:9px 11px;font-size:.68rem;font-weight:850
+}
+.mobile-tool.active{color:#d4c3ff;border-color:#8d67e8;background:rgba(139,92,246,.12)}
+.exercise-navigation{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:8px;margin-top:13px}
+.exercise-navigation .btn{min-height:52px}
+.mobile-workout-note{min-height:74px!important;margin-top:12px!important;padding:13px!important}
+.mobile-timer{
+  position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:150;
+  width:min(390px,calc(100% - 22px));padding:11px 12px;border-radius:24px;
+  background:rgba(10,24,37,.96);border:1px solid #36536a;
+  box-shadow:0 22px 65px rgba(0,0,0,.55);backdrop-filter:blur(18px);
+  display:none;align-items:center;gap:10px;animation:timerUp .25s ease
+}
+.mobile-timer.show{display:flex}
+.mobile-timer-ring{
+  width:52px;height:52px;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(#8b5cf6 calc(var(--timer-progress,1)*100%),#263b4e 0);
+  position:relative
+}
+.mobile-timer-ring:before{content:"";position:absolute;inset:5px;border-radius:50%;background:#102334}
+.mobile-timer-ring strong{position:relative;font-size:.72rem;font-variant-numeric:tabular-nums}
+.mobile-timer-copy{flex:1;min-width:0}
+.mobile-timer-copy strong{display:block;font-size:.86rem}.mobile-timer-copy span{font-size:.65rem;color:#879aaa}
+.mobile-timer-action{
+  width:42px;height:42px;border-radius:14px;border:1px solid #355169;background:#162c40;
+  color:#fff;font-weight:900
+}
+#timer{display:none!important}
+#finishWorkoutBtn{margin-bottom:85px!important;min-height:56px;border-radius:19px;font-size:.95rem}
+@keyframes mobileExerciseIn{from{opacity:0;transform:translateX(10px) scale(.99)}to{opacity:1;transform:none}}
+@keyframes mobileCheck{0%{transform:scale(.65) rotate(-10deg)}65%{transform:scale(1.12) rotate(4deg)}100%{transform:scale(1)}}
+@keyframes timerUp{from{opacity:0;transform:translate(-50%,15px) scale(.96)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+@media(min-width:760px){
+  #workoutPage{max-width:680px}
+}
+@media(max-width:420px){
+  .mobile-set{grid-template-columns:36px minmax(0,1fr) minmax(0,1fr) 48px;padding:7px;gap:5px}
+  .mobile-set-number{width:34px;height:34px}
+  .mobile-input-wrap input{height:49px;font-size:.96rem}
+  .mobile-check{width:46px;height:46px}
+}
+</style>
+
 </head>
 <body>
 <svg style="display:none">
@@ -477,7 +607,7 @@ body.compact .section{padding:13px}body.compact .card{border-radius:20px}body.co
   <div class="drawer-label">Datos</div>
   <button class="drawer-item" id="exportBtn"><span class="drawer-item-main"><svg><use href="#i-download"/></svg><span><strong>Exportar copia</strong><small>Rutinas, sesiones y medidas</small></span></span></button>
   <label class="drawer-item"><span class="drawer-item-main"><svg><use href="#i-upload"/></svg><span><strong>Importar copia</strong><small>Restaurar tus datos</small></span></span><input type="file" id="importInput" accept=".json" hidden></label>
-  <button class="drawer-item" id="resetBtn"><span class="drawer-item-main" style="color:#ff8585"><svg><use href="#i-x"/></svg><span><strong>Restablecer app</strong><small>Borrar datos locales</small></span></span></button>
+  <button class="drawer-item" id="resetBtn"><span class="drawer-item-main" style="color:#ff8585"><svg><use href="#i-x"/></svg><span><strong>Restablecer cuenta</strong><small>Eliminar todos los datos de Supabase</small></span></span></button>
 </aside>
 
 <main class="app">
@@ -724,7 +854,7 @@ const defaults={routine:[
 ].map(r=>({...r,exercises:r.exercises.map(x=>({id:x[0],name:x[1],sets:x[2],minReps:x[3],maxReps:x[4],weight:x[5],rest:x[6],rir:x[7],active:true}))})),sessions:[],bodyMeasurements:[{date:"2026-07-24",weight:70.4,height:184,bodyFat:14.6,waist:null,chest:null,arm:null,leg:null,neck:null,notes:"Registro inicial"}]};
 const clone=o=>JSON.parse(JSON.stringify(o));
 let data=loadData(),profile=loadProfile(),ui=loadUI(),pendingPhoto=profile.photo||"",currentMonth=new Date(),nutritionDate=new Date(),editingRoutine=-1,currentProgressTab="exercises",timerId=null,timerSeconds=0,activePage="homePage",pendingMealEstimate=null;
-function loadData(){try{const raw=localStorage.getItem(KEY)||localStorage.getItem(LEGACY_KEY);const parsed=raw?JSON.parse(raw):clone(defaults);return normalizeData(parsed)}catch{return clone(defaults)}}
+function loadData(){return clone(defaults)}
 function normalizeData(d){
   d.routine=d.routine||clone(defaults.routine);
   d.routine.forEach(day=>{
@@ -736,11 +866,11 @@ function normalizeData(d){
   d.bodyMeasurements=d.bodyMeasurements||d.body||[];
   return d
 }
-function loadProfile(){try{return JSON.parse(localStorage.getItem(PROFILE_KEY))||{name:"Nicolás",goal:"Proyecto Prime",photo:""}}catch{return{name:"Nicolás",goal:"Proyecto Prime",photo:""}}}
-function loadUI(){try{return JSON.parse(localStorage.getItem(UI_KEY))||{light:false,compact:false}}catch{return{light:false,compact:false}}}
-function save(){localStorage.setItem(KEY,JSON.stringify(data));queueCloudSync()}
-function saveProfile(){localStorage.setItem(PROFILE_KEY,JSON.stringify(profile));queueCloudSync()}
-function saveUI(){localStorage.setItem(UI_KEY,JSON.stringify(ui));queueCloudSync()}
+function loadProfile(){return{name:"Nicolás",goal:"Proyecto Prime",photo:""}}
+function loadUI(){return{light:false,compact:false}}
+function save(){queueCloudSync()}
+function saveProfile(){queueCloudSync()}
+function saveUI(){queueCloudSync()}
 function iso(d=new Date()){const x=new Date(d.getTime()-d.getTimezoneOffset()*60000);return x.toISOString().slice(0,10)}
 function fmt(n){return Number(n||0).toLocaleString("es-AR",{maximumFractionDigits:1})}
 function toast(t){const e=document.getElementById("toast");e.textContent=t;e.classList.add("show");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("show"),2100)}
@@ -1119,10 +1249,10 @@ window.deleteMeal=async id=>{data.meals=data.meals.filter(m=>m.id!==id);save();i
 
 function updateCloudStatus(mode,title,text){const box=document.getElementById("cloudStatus");if(!box)return;box.className=`cloud-status ${mode||""}`;document.getElementById("cloudStatusTitle").textContent=title;document.getElementById("cloudStatusText").textContent=text}
 function renderAuthState(){const signedIn=Boolean(currentUser);document.getElementById("signedOutPanel").hidden=signedIn;document.getElementById("signedInPanel").hidden=!signedIn;if(signedIn){document.getElementById("signedInEmail").textContent=currentUser.email||"Cuenta conectada";updateCloudStatus("online","Sincronización activa",lastCloudSync?`Última sincronización: ${new Date(lastCloudSync).toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"})}`:"Preparando primera sincronización...")}else updateCloudStatus("","Sin sesión","Tus datos están guardados localmente")}
-function queueCloudSync(){if(!currentUser||cloudSyncing)return;clearTimeout(cloudSyncTimer);cloudSyncTimer=setTimeout(()=>syncAllToCloud(false),900)}
-async function syncAllToCloud(showToast=true){if(!currentUser)return showToast&&toast("Iniciá sesión para sincronizar");cloudSyncing=true;updateCloudStatus("syncing","Sincronizando...","Guardando todos los módulos en Supabase");try{const payload={user_id:currentUser.id,state:data,profile,ui,device_updated_at:new Date().toISOString(),updated_at:new Date().toISOString()};const{error}=await sb.from("prime_app_state").upsert(payload,{onConflict:"user_id"});if(error)throw error;lastCloudSync=new Date().toISOString();localStorage.setItem("prime-last-cloud-sync",lastCloudSync);updateCloudStatus("online","Todo sincronizado",`Última sincronización: ${new Date(lastCloudSync).toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"})}`);if(showToast)toast("Datos guardados en Supabase")}catch(error){console.error(error);updateCloudStatus("error","Error de sincronización",error.message||"No se pudo guardar");if(showToast)toast(error.message||"Error de sincronización")}finally{cloudSyncing=false}}
-async function loadAllFromCloud(confirmReplace=false){if(!currentUser)return;try{const{data:row,error}=await sb.from("prime_app_state").select("state,profile,ui,updated_at").eq("user_id",currentUser.id).maybeSingle();if(error)throw error;if(!row){await syncAllToCloud(false);return}if(confirmReplace&&!confirm("Esto reemplazará los datos de este dispositivo por la copia de Supabase. ¿Continuar?"))return;data=normalizeData(row.state||clone(defaults));profile=row.profile||profile;ui=row.ui||ui;localStorage.setItem(KEY,JSON.stringify(data));localStorage.setItem(PROFILE_KEY,JSON.stringify(profile));localStorage.setItem(UI_KEY,JSON.stringify(ui));lastCloudSync=row.updated_at;renderAll();renderAuthState();toast("Datos descargados de Supabase")}catch(error){console.error(error);toast(error.message||"No se pudieron descargar los datos")}}
-async function initializeCloud(){lastCloudSync=localStorage.getItem("prime-last-cloud-sync");const{data:{session}}=await sb.auth.getSession();currentUser=session?.user||null;renderAuthState();sb.auth.onAuthStateChange(async(event,sessionNow)=>{currentUser=sessionNow?.user||null;renderAuthState();if(event==="SIGNED_IN"){await loadAllFromCloud(false);await checkAIConnection()}});if(currentUser)await loadAllFromCloud(false)}
+function queueCloudSync(){if(!currentUser||cloudSyncing)return;clearTimeout(cloudSyncTimer);cloudSyncTimer=setTimeout(()=>syncAllToCloud(false),180)}
+async function syncAllToCloud(showToast=true){if(!currentUser)return showToast&&toast("Iniciá sesión para sincronizar");cloudSyncing=true;updateCloudStatus("syncing","Sincronizando...","Guardando todos los módulos en Supabase");try{const payload={user_id:currentUser.id,state:data,profile,ui,device_updated_at:new Date().toISOString(),updated_at:new Date().toISOString()};const{error}=await sb.from("prime_app_state").upsert(payload,{onConflict:"user_id"});if(error)throw error;lastCloudSync=new Date().toISOString();updateCloudStatus("online","Todo sincronizado",`Última sincronización: ${new Date(lastCloudSync).toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"})}`);if(showToast)toast("Datos guardados en Supabase")}catch(error){console.error(error);updateCloudStatus("error","Error de sincronización",error.message||"No se pudo guardar");if(showToast)toast(error.message||"Error de sincronización")}finally{cloudSyncing=false}}
+async function loadAllFromCloud(confirmReplace=false){if(!currentUser)return;try{const{data:row,error}=await sb.from("prime_app_state").select("state,profile,ui,updated_at").eq("user_id",currentUser.id).maybeSingle();if(error)throw error;if(!row){await syncAllToCloud(false);return}if(confirmReplace&&!confirm("Esto reemplazará los datos de este dispositivo por la copia de Supabase. ¿Continuar?"))return;data=normalizeData(row.state||clone(defaults));profile=row.profile||profile;ui=row.ui||ui;lastCloudSync=row.updated_at;renderAll();renderAuthState();toast("Datos descargados de Supabase")}catch(error){console.error(error);toast(error.message||"No se pudieron descargar los datos")}}
+async function initializeCloud(){lastCloudSync=null;const{data:{session}}=await sb.auth.getSession();currentUser=session?.user||null;renderAuthState();sb.auth.onAuthStateChange(async(event,sessionNow)=>{currentUser=sessionNow?.user||null;renderAuthState();if(event==="SIGNED_IN"){await loadAllFromCloud(false);await checkAIConnection()}});if(currentUser)await loadAllFromCloud(false)}
 async function callSmartHandler(payload){const{data:{session}}=await sb.auth.getSession();const headers={"Content-Type":"application/json","apikey":SUPABASE_PUBLISHABLE_KEY};if(session?.access_token)headers.Authorization=`Bearer ${session.access_token}`;const response=await fetch(SMART_HANDLER_URL,{method:"POST",headers,body:JSON.stringify(payload)});let result;try{result=await response.json()}catch{throw new Error(`La función respondió ${response.status} sin JSON`)}if(!response.ok||result.ok===false)throw new Error(result.error||result.message||`Error ${response.status}`);return result}
 async function checkAIConnection(){const badge=document.getElementById("aiModeBadge");badge.className="ai-connection loading";badge.textContent="Conectando IA...";try{const result=await callSmartHandler({action:"status",live:true});badge.className="ai-connection online";badge.textContent="IA conectada";badge.title=result.message||"Globant AI conectada"}catch(error){console.error(error);badge.className="ai-connection error";badge.textContent="IA sin conexión";badge.title=error.message}}
 async function saveMealRecordToCloud(meal){if(!currentUser)return;const row={id:meal.id,user_id:currentUser.id,eaten_at:`${meal.date}T${meal.time||"12:00"}:00`,meal_date:meal.date,meal_type:meal.type,description:meal.description,normalized_name:meal.normalizedName||null,calories:meal.calories,protein_g:meal.protein,carbs_g:meal.carbs,fat_g:meal.fat,fiber_g:meal.fiber??null,confidence:meal.confidence||"medium",confidence_percent:meal.confidencePercent||null,estimated_total_weight_g:meal.estimatedTotalWeight??null,items:meal.items||[],assumptions:meal.assumptions||[],source:"ai_estimate",updated_at:new Date().toISOString()};const{error}=await sb.from("nutrition_meals").upsert(row,{onConflict:"id"});if(error)console.error("nutrition_meals:",error)}
@@ -1208,7 +1338,28 @@ document.getElementById("registerBtn").onclick=async()=>{const email=document.ge
 document.getElementById("logoutBtn").onclick=async()=>{await sb.auth.signOut();currentUser=null;renderAuthState();closeModal("cloudAccountModal");toast("Sesión cerrada")};document.getElementById("syncNowBtn").onclick=()=>syncAllToCloud(true);document.getElementById("loadCloudBtn").onclick=()=>loadAllFromCloud(true);
 document.getElementById("exportBtn").onclick=()=>{const payload={data,profile,ui,exportedAt:new Date().toISOString()},blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`prime-training-${iso()}.json`;a.click();URL.revokeObjectURL(url)};
 document.getElementById("importInput").onchange=async e=>{try{const p=JSON.parse(await e.target.files[0].text());data=normalizeData(p.data||p);if(p.profile)profile=p.profile;if(p.ui)ui=p.ui;save();saveProfile();saveUI();renderAll();toast("Copia importada")}catch{toast("Archivo inválido")}};
-document.getElementById("resetBtn").onclick=()=>{if(!confirm("¿Seguro que querés borrar todos los datos?"))return;data=clone(defaults);save();renderAll();toast("Aplicación restablecida")};
+document.getElementById("resetBtn").onclick=async()=>{
+  if(!currentUser)return toast("Iniciá sesión para restablecer la cuenta");
+  if(!confirm("Esto eliminará rutinas, entrenamientos, comidas, medidas, biblioteca y reportes de Supabase. ¿Continuar?"))return;
+  const confirmation=prompt('Escribí BORRAR para confirmar');
+  if(confirmation!=="BORRAR")return toast("Restablecimiento cancelado");
+  updateCloudStatus("syncing","Eliminando datos...","No cierres la aplicación");
+  try{
+    const {error:resetError}=await sb.rpc("reset_prime_training_account");
+    if(resetError)throw resetError;
+    data=normalizeData(clone(defaults));
+    profile={name:"Nicolás",goal:"Proyecto Prime",photo:""};
+    ui={light:false,compact:false};
+    await syncAllToCloud(false);
+    renderAll();showPage("homePage");
+    updateCloudStatus("online","Cuenta restablecida","Se creó un estado limpio en Supabase");
+    toast("Todos los datos fueron eliminados");
+  }catch(error){
+    console.error(error);
+    updateCloudStatus("error","No se pudo restablecer",error.message||"Error de Supabase");
+    toast(error.message||"No se pudieron borrar los datos");
+  }
+};
 renderAll();showPage("homePage");initializeCloud();checkAIConnection();
 </script>
 
@@ -1226,6 +1377,8 @@ renderAll();showPage("homePage");initializeCloud();checkAIConnection();
     {type:"Cena",label:"Cena",required:true}
   ];
   const REQUIRED_MEALS = ["Desayuno","Almuerzo","Merienda","Cena"];
+  window.PRIME_MEAL_SLOTS=MEAL_SLOTS;
+  window.PRIME_REQUIRED_MEALS=REQUIRED_MEALS;
   let currentMealSlot = "Desayuno";
   let editingSavedMealId = null;
 
@@ -1657,6 +1810,19 @@ renderAll();showPage("homePage");initializeCloud();checkAIConnection();
 <script id="primeIntelligenceV3Script">
 (() => {
   "use strict";
+  const MEAL_SLOTS = window.PRIME_MEAL_SLOTS || [
+    {type:"Desayuno",label:"Desayuno",required:true},
+    {type:"Colación mañana",label:"Colación de media mañana",required:false},
+    {type:"Almuerzo",label:"Almuerzo",required:true},
+    {type:"Colación tarde",label:"Colación de la tarde",required:false},
+    {type:"Merienda",label:"Merienda",required:true},
+    {type:"Colación noche",label:"Colación nocturna",required:false},
+    {type:"Cena",label:"Cena",required:true}
+  ];
+  const REQUIRED_MEALS = window.PRIME_REQUIRED_MEALS || ["Desayuno","Almuerzo","Merienda","Cena"];
+  window.PRIME_MEAL_SLOTS = MEAL_SLOTS;
+  window.PRIME_REQUIRED_MEALS = REQUIRED_MEALS;
+
 
   function ensureWorkoutTimes(){
     const defaults={1:"18:30",2:"18:30",3:"18:30",4:"18:30",5:"18:30",6:"11:00",0:"11:00"};
@@ -1849,6 +2015,19 @@ renderAll();showPage("homePage");initializeCloud();checkAIConnection();
 <script id="primeRealtimeAIAddon">
 (() => {
   "use strict";
+  const MEAL_SLOTS = window.PRIME_MEAL_SLOTS || [
+    {type:"Desayuno",label:"Desayuno",required:true},
+    {type:"Colación mañana",label:"Colación de media mañana",required:false},
+    {type:"Almuerzo",label:"Almuerzo",required:true},
+    {type:"Colación tarde",label:"Colación de la tarde",required:false},
+    {type:"Merienda",label:"Merienda",required:true},
+    {type:"Colación noche",label:"Colación nocturna",required:false},
+    {type:"Cena",label:"Cena",required:true}
+  ];
+  const REQUIRED_MEALS = window.PRIME_REQUIRED_MEALS || ["Desayuno","Almuerzo","Merienda","Cena"];
+  window.PRIME_MEAL_SLOTS = MEAL_SLOTS;
+  window.PRIME_REQUIRED_MEALS = REQUIRED_MEALS;
+
 
   function readinessContext(){
     const routine=todayRoutine(),body=latestBody()||{},local=preWorkoutReadiness();
@@ -1935,6 +2114,184 @@ renderAll();showPage("homePage");initializeCloud();checkAIConnection();
   };
 
   renderAll();
+})();
+</script>
+
+
+<script id="primeCloudWorkoutScript">
+(() => {
+  "use strict";
+
+  window.activeWorkoutExerciseIndex = window.activeWorkoutExerciseIndex || 0;
+  let mobileTimerTotal = 90;
+
+  // Require Supabase session for any persisted action.
+  const originalQueueCloudSync = queueCloudSync;
+  queueCloudSync = function(){
+    if(!currentUser){
+      updateCloudStatus("error","Sin sesión","Iniciá sesión: ningún dato se guarda en el navegador");
+      return;
+    }
+    originalQueueCloudSync();
+  };
+
+  function renderCloudOnlyNote(){
+    const drawer=document.getElementById("drawer");
+    if(!drawer||document.getElementById("cloudOnlyNote"))return;
+    const label=[...drawer.querySelectorAll(".drawer-label")].find(x=>x.textContent.trim()==="Datos");
+    if(label)label.insertAdjacentHTML("afterend",`<div class="cloud-only-note" id="cloudOnlyNote"><svg style="width:15px;height:15px"><use href="#i-check"/></svg>Persistencia exclusiva en Supabase</div>`);
+  }
+
+  function totalWorkoutProgress(session){
+    const strengthTotal=session.exercises.reduce((a,e)=>a+e.sets.filter(x=>!x.warmup&&!e.skipped).length,0);
+    const strengthDone=session.exercises.reduce((a,e)=>a+e.sets.filter(x=>x.done&&!x.warmup).length,0);
+    const cardioTotal=(session.cardio||[]).length;
+    const cardioDone=(session.cardio||[]).filter(c=>c.done).length;
+    return{total:strengthTotal+cardioTotal,done:strengthDone+cardioDone};
+  }
+
+  renderWorkout=function(){
+    const session=getSession();
+    if(!session)return;
+    const exercises=session.exercises||[];
+    if(!exercises.length){
+      document.getElementById("workoutExercises").innerHTML='<div class="empty">No hay ejercicios configurados.</div>';
+      return;
+    }
+    activeWorkoutExerciseIndex=Math.max(0,Math.min(activeWorkoutExerciseIndex,exercises.length-1));
+    const exercise=exercises[activeWorkoutExerciseIndex];
+    const progress=totalWorkoutProgress(session);
+    const percent=Math.round(progress.done/Math.max(1,progress.total)*100);
+    const completedSets=exercise.sets.filter(x=>x.done&&!x.warmup).length;
+
+    document.getElementById("focusTitle").textContent=session.muscle;
+    document.getElementById("focusProgress").textContent=`${progress.done}/${progress.total} bloques · ${percent}%`;
+
+    const header=document.querySelector("#workoutPage .focus-header");
+    let bar=header.querySelector(".workout-mobile-progress");
+    if(!bar){header.insertAdjacentHTML("beforeend",'<div class="workout-mobile-progress"><div></div></div>');bar=header.querySelector(".workout-mobile-progress")}
+    bar.firstElementChild.style.width=percent+"%";
+
+    document.getElementById("workoutExercises").innerHTML=`
+      <div class="exercise-pager">
+        ${exercises.map((e,i)=>{
+          const done=e.sets.filter(s=>s.done&&!s.warmup).length>=e.targetSets;
+          return`<button class="exercise-pill ${i===activeWorkoutExerciseIndex?"active":""} ${done?"done":""}" onclick="selectWorkoutExercise(${i})">${done?"✓":i+1}</button>`
+        }).join("")}
+      </div>
+      <article class="mobile-exercise-card">
+        <div class="exercise-head">
+          <div>
+            <div class="eyebrow">EJERCICIO ${activeWorkoutExerciseIndex+1} DE ${exercises.length}</div>
+            <div class="mobile-exercise-title">${exercise.name}</div>
+            <div class="mobile-exercise-meta">${exercise.targetSets} series · ${exercise.minReps}-${exercise.maxReps} reps · sugerido ${exercise.suggestedWeight} kg · RIR ${exercise.rirTarget}</div>
+          </div>
+          <span class="badge ${completedSets>=exercise.targetSets?"badge-green":"badge-purple"}">${completedSets}/${exercise.targetSets}</span>
+        </div>
+        <div class="mobile-set-list">
+          ${exercise.sets.map((set,index)=>`
+            <div class="mobile-set ${set.done?"completed":""}">
+              <div class="mobile-set-number">${set.warmup?"C":set.set}</div>
+              <div class="mobile-input-wrap"><label>peso kg</label><input type="number" inputmode="decimal" step=".5" value="${set.weight}" onchange="updateSet(${activeWorkoutExerciseIndex},${index},'weight',this.value)"></div>
+              <div class="mobile-input-wrap"><label>repeticiones</label><input type="number" inputmode="numeric" value="${set.reps}" placeholder="${exercise.minReps}" onchange="updateSet(${activeWorkoutExerciseIndex},${index},'reps',this.value)"></div>
+              <button class="mobile-check ${set.done?"done":""}" onclick="toggleSet(${activeWorkoutExerciseIndex},${index})"><svg><use href="#i-check"/></svg></button>
+            </div>
+          `).join("")}
+        </div>
+        <div class="mobile-tools">
+          <button class="mobile-tool" onclick="addSet(${activeWorkoutExerciseIndex})">+ Serie</button>
+          <button class="mobile-tool" onclick="addWarmup(${activeWorkoutExerciseIndex})">Calentamiento</button>
+          <button class="mobile-tool ${exercise.tag==="Me costó"?"active":""}" onclick="tagExercise(${activeWorkoutExerciseIndex},'Me costó')">Me costó</button>
+          <button class="mobile-tool ${exercise.tag==="Dolor"?"active":""}" onclick="tagExercise(${activeWorkoutExerciseIndex},'Dolor')">Dolor</button>
+          <button class="mobile-tool ${exercise.skipped?"active":""}" onclick="skipExercise(${activeWorkoutExerciseIndex})">Saltar</button>
+        </div>
+        <textarea class="field mobile-workout-note" placeholder="¿Cómo te sentiste en este ejercicio?" onchange="updateNote(${activeWorkoutExerciseIndex},this.value)">${exercise.note||""}</textarea>
+        <div class="exercise-navigation">
+          <button class="btn btn-secondary" onclick="moveWorkoutExercise(-1)" ${activeWorkoutExerciseIndex===0?"disabled":""}><svg><use href="#i-left"/></svg></button>
+          <button class="btn btn-soft" onclick="startMobileRest(${exercise.rest||90})"><svg><use href="#i-clock"/></svg>Descanso</button>
+          <button class="btn btn-secondary" onclick="moveWorkoutExercise(1)" ${activeWorkoutExerciseIndex===exercises.length-1?"disabled":""}><svg><use href="#i-right"/></svg></button>
+        </div>
+      </article>
+    `;
+  };
+
+  window.selectWorkoutExercise=function(index){
+    activeWorkoutExerciseIndex=index;renderWorkout();scrollTo({top:0,behavior:"smooth"})
+  };
+  window.moveWorkoutExercise=function(direction){
+    selectWorkoutExercise(activeWorkoutExerciseIndex+direction)
+  };
+
+  // Override old timer with a clean mobile timer.
+  function ensureMobileTimer(){
+    let timer=document.getElementById("mobileRestTimer");
+    if(timer)return timer;
+    document.body.insertAdjacentHTML("beforeend",`
+      <div class="mobile-timer" id="mobileRestTimer">
+        <div class="mobile-timer-ring" id="mobileTimerRing"><strong id="mobileTimerText">01:30</strong></div>
+        <div class="mobile-timer-copy"><strong>Tiempo de descanso</strong><span id="mobileTimerSubtitle">Recuperate para la próxima serie</span></div>
+        <button class="mobile-timer-action" onclick="adjustMobileTimer(15)">+15</button>
+        <button class="mobile-timer-action" onclick="closeMobileTimer()">×</button>
+      </div>`);
+    return document.getElementById("mobileRestTimer")
+  }
+  function updateMobileTimer(){
+    const timer=ensureMobileTimer();
+    const text=document.getElementById("mobileTimerText");
+    text.textContent=`${String(Math.floor(timerSeconds/60)).padStart(2,"0")}:${String(Math.max(0,timerSeconds%60)).padStart(2,"0")}`;
+    document.getElementById("mobileTimerRing").style.setProperty("--timer-progress",Math.max(0,timerSeconds)/Math.max(1,mobileTimerTotal))
+  }
+  window.startMobileRest=function(seconds){
+    clearInterval(timerId);mobileTimerTotal=seconds;timerSeconds=seconds;
+    ensureMobileTimer().classList.add("show");updateMobileTimer();
+    timerId=setInterval(()=>{
+      timerSeconds--;updateMobileTimer();
+      if(timerSeconds<=0){
+        clearInterval(timerId);ensureMobileTimer().classList.remove("show");
+        navigator.vibrate?.([180,90,180]);toast("Descanso terminado")
+      }
+    },1000)
+  };
+  window.adjustMobileTimer=function(seconds){timerSeconds=Math.max(0,timerSeconds+seconds);mobileTimerTotal=Math.max(mobileTimerTotal,timerSeconds);updateMobileTimer()};
+  window.closeMobileTimer=function(){clearInterval(timerId);ensureMobileTimer().classList.remove("show")};
+
+  // Existing set completion now starts the redesigned timer.
+  const originalToggleSet=window.toggleSet;
+  window.toggleSet=function(exerciseIndex,setIndex){
+    const session=getSession(),exercise=session?.exercises[exerciseIndex],set=exercise?.sets[setIndex];
+    if(!set)return;
+    const wasDone=set.done;
+    set.done=!set.done;
+    if(set.done&&!set.reps)set.reps=exercise.minReps;
+    save();
+    if(!wasDone&&set.done)startMobileRest(exercise.rest||90);
+    renderWorkout();renderHome();renderCalendar()
+  };
+
+  renderCalendar=function(){
+    const y=currentMonth.getFullYear(),m=currentMonth.getMonth(),first=new Date(y,m,1),offset=(first.getDay()+6)%7;
+    document.getElementById("calendarTitle").textContent=currentMonth.toLocaleDateString("es-AR",{month:"long",year:"numeric"});
+    const sessionsByDate=new Map((data.sessions||[]).map(session=>[session.date,session]));
+    const cells=[];
+    for(let i=0;i<42;i++){
+      const d=new Date(y,m,1-offset+i),date=iso(d),session=sessionsByDate.get(date),outside=d.getMonth()!==m;
+      const routine=(data.routine||[]).find(day=>day.day===d.getDay());
+      let state="";
+      if(session?.status==="completed")state="completed";
+      else if(session?.status==="partial"||session?.status==="in_progress")state="partial";
+      else if(session?.status==="skipped")state="skipped";
+      else if(routine?.mode==="rest")state="rest";
+      cells.push(`<button class="day ${state} ${date===iso()?"today":""}" style="${outside?"opacity:.32":""}" onclick="openDayDetail('${date}')"><span class="day-number">${d.getDate()}</span><span class="day-dot"></span></button>`)
+    }
+    document.getElementById("calendarGrid").innerHTML=cells.join("");
+    const key=`${y}-${String(m+1).padStart(2,"0")}`,sessions=(data.sessions||[]).filter(session=>session.date?.startsWith(key));
+    const completed=sessions.filter(session=>session.status==="completed").length,vol=sessions.reduce((a,session)=>a+volume(session),0);
+    document.getElementById("monthMetrics").innerHTML=[["Entrenamientos",sessions.length],["Completados",completed],["Cumplimiento",`${sessions.length?Math.round(completed/sessions.length*100):0}%`],["Volumen",`${fmt(vol)} kg`]].map(item=>`<div class="report-metric"><span>${item[0]}</span><strong>${item[1]}</strong></div>`).join("")
+  };
+
+  renderCloudOnlyNote();
+  renderCalendar();
+  if(getSession())renderWorkout();
 })();
 </script>
 
