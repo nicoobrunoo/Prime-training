@@ -390,6 +390,35 @@ body.compact .section{padding:13px}body.compact .card{border-radius:20px}body.co
 @media(max-width:520px){.library-grid{grid-template-columns:1fr}.objective-selector{grid-template-columns:1fr}.slot-head{align-items:flex-start}.slot-actions{flex-direction:column}}
 </style>
 
+
+<style id="primeIntelligenceV3Styles">
+.preworkout-card{
+  margin:13px 0 0;padding:13px;border-radius:18px;border:1px solid #30475d;
+  background:linear-gradient(135deg,#13263a,#101f30);position:relative;overflow:hidden
+}
+.preworkout-card:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--ready-color,#f59e0b)}
+.preworkout-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.readiness-badge{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border-radius:999px;font-size:.67rem;font-weight:950;background:color-mix(in srgb,var(--ready-color) 14%,transparent);color:var(--ready-color)}
+.readiness-dot{width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 0 5px color-mix(in srgb,currentColor 12%,transparent)}
+.preworkout-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:11px}
+.preworkout-metric{padding:9px;border-radius:13px;background:#142638;border:1px solid #294157;min-width:0}
+.preworkout-metric span{display:block;color:var(--muted);font-size:.61rem}.preworkout-metric strong{display:block;font-size:.8rem;margin-top:4px;overflow-wrap:anywhere}
+.preworkout-suggestion{margin-top:10px;color:#c1ccd6;font-size:.75rem;line-height:1.45}
+.meal-guidance{margin:0 12px 11px;padding:9px 10px;border-radius:13px;border:1px dashed rgba(139,92,246,.32);background:rgba(139,92,246,.055);color:#b9a3ec;font-size:.69rem;line-height:1.4}
+.composer-guidance{padding:11px;border-radius:15px;margin-bottom:10px;background:linear-gradient(135deg,rgba(34,211,238,.08),rgba(139,92,246,.07));border:1px solid rgba(34,211,238,.22)}
+.component-group{margin-top:8px;border:1px solid #2a4156;border-radius:14px;overflow:hidden}
+.component-title{padding:8px 10px;background:#17293c;font-size:.7rem;font-weight:950;color:#c7d2dc}
+.component-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:8px 10px;border-top:1px solid #263d51;font-size:.68rem}
+.component-item small{display:block;color:var(--muted);margin-top:3px;line-height:1.35}
+.quantity-editor{display:grid;grid-template-columns:minmax(0,1fr) 90px;gap:7px;align-items:center}
+.workout-time-display{display:inline-flex;align-items:center;gap:5px;color:#9fd8ff;font-size:.7rem;margin-top:7px}
+@media(max-width:480px){
+  .preworkout-grid{grid-template-columns:1fr 1fr}
+  .preworkout-metric:last-child{grid-column:1/-1}
+  .quantity-editor{grid-template-columns:1fr}
+}
+</style>
+
 </head>
 <body>
 <svg style="display:none">
@@ -1476,9 +1505,20 @@ renderAll();showPage("homePage");initializeCloud();checkAIConnection();
       const body=latestBody()||{};
       const result=await callSmartHandler({action:"analyze_meal",description,mealType:document.getElementById("mealTypePro").value,clarification,userContext:{country:"Argentina",weightKg:+body.weight||70.4,heightCm:+body.height||184,goal:data.nutritionSettings.goal},savedMeals:data.savedMeals.slice(0,12).map(m=>({name:m.name,calories:m.calories,protein_g:m.protein,carbs_g:m.carbs,fat_g:m.fat}))});
       const a=result.analysis;
-      pendingMealEstimate={calories:a.calories,protein:a.protein_g,carbs:a.carbs_g,fat:a.fat_g,fiber:a.fiber_g,confidence:a.confidence,confidencePercent:a.confidence_percent,normalizedName:a.normalized_name,estimatedTotalWeight:a.estimated_total_weight_g,items:a.items||[],assumptions:a.assumptions||[],range:a.plausible_range};
+      pendingMealEstimate={calories:a.calories,protein:a.protein_g,carbs:a.carbs_g,fat:a.fat_g,fiber:a.fiber_g,confidence:a.confidence,confidencePercent:a.confidence_percent,normalizedName:a.normalized_name,estimatedTotalWeight:a.estimated_total_weight_g,items:a.items||[],components:a.components||[],detectedModifiers:a.detected_modifiers||[],assumptions:a.assumptions||[],range:a.plausible_range};
       document.getElementById("estimatedCaloriesPro").value=a.calories;document.getElementById("estimatedProteinPro").value=a.protein_g;document.getElementById("estimatedCarbsPro").value=a.carbs_g;document.getElementById("estimatedFatPro").value=a.fat_g;document.getElementById("aiNormalizedNamePro").textContent=a.normalized_name;document.getElementById("aiExplanationPro").textContent=(a.assumptions||[]).slice(0,3).join(" · ")||"Estimación generada por IA";document.getElementById("aiConfidencePro").textContent=`Confianza ${a.confidence_percent}%`;
-      document.getElementById("aiDetectedItemsPro").innerHTML=(a.items||[]).map(i=>`<div class="ai-item-row"><span>${i.name}${i.estimated_weight_g?` · ${i.estimated_weight_g} g`:""}</span><strong>${i.calories} kcal</strong></div>`).join("");
+      {
+        const grouped={};
+        (a.items||[]).forEach(item=>{const key=item.component||"Comida";(grouped[key]??=[]).push(item)});
+        document.getElementById("aiDetectedItemsPro").innerHTML=Object.entries(grouped).map(([component,items])=>`
+          <div class="component-group">
+            <div class="component-title">${component}</div>
+            ${items.map(i=>`<div class="component-item">
+              <div><strong>${i.name}</strong><small>${i.quantity_modifier?`${i.quantity_modifier} · `:""}${i.preparation||"Preparación no especificada"}${i.assumptions?.length?` · ${i.assumptions[0]}`:""}</small></div>
+              <div style="text-align:right"><strong>${i.estimated_weight_g??"—"} g</strong><small>${i.calories} kcal · confianza ${i.confidence_percent??"—"}%</small></div>
+            </div>`).join("")}
+          </div>`).join("");
+      }
       document.getElementById("aiRangeTextPro").textContent=a.plausible_range?`Rango plausible: ${a.plausible_range.calories_min}-${a.plausible_range.calories_max} kcal · proteína ${a.plausible_range.protein_min_g}-${a.plausible_range.protein_max_g} g`:"";
       document.getElementById("clarificationBoxPro").classList.toggle("show",Boolean(a.clarification_suggestion));document.getElementById("clarificationQuestionPro").textContent=a.clarification_suggestion||"";document.getElementById("aiMealProResult").classList.add("show");
     }catch(error){toast(error.message||"No se pudo analizar")}finally{button.disabled=false;button.textContent=original}
@@ -1609,6 +1649,291 @@ renderAll();showPage("homePage");initializeCloud();checkAIConnection();
   enhanceCoach();
   bindProEvents();
   save();
+  renderAll();
+})();
+</script>
+
+
+<script id="primeIntelligenceV3Script">
+(() => {
+  "use strict";
+
+  function ensureWorkoutTimes(){
+    const defaults={1:"18:30",2:"18:30",3:"18:30",4:"18:30",5:"18:30",6:"11:00",0:"11:00"};
+    (data.routine||[]).forEach(day=>{
+      if(!day.workoutTime)day.workoutTime=defaults[day.day]||"18:30";
+    });
+  }
+
+  function addWorkoutTimeField(){
+    const modal=document.getElementById("routineModal");
+    if(!modal||document.getElementById("routineWorkoutTime"))return;
+    const grid=modal.querySelector(".form-grid");
+    if(!grid)return;
+    grid.insertAdjacentHTML("beforeend",`
+      <div class="form-group">
+        <label>Horario habitual de entrenamiento</label>
+        <input class="field" id="routineWorkoutTime" type="time">
+      </div>
+    `);
+    const input=document.getElementById("routineWorkoutTime");
+    input.addEventListener("input",()=>{
+      if(Number.isInteger(editingRoutine)&&data.routine[editingRoutine]){
+        data.routine[editingRoutine].workoutTime=input.value;
+      }
+    });
+    document.addEventListener("click",event=>{
+      const edit=event.target.closest("[data-edit-day]");
+      if(!edit)return;
+      setTimeout(()=>{
+        const routine=data.routine[+edit.dataset.editDay];
+        input.value=routine?.workoutTime||"18:30";
+      },0);
+    },true);
+  }
+
+  function parseMinutes(value){
+    if(!value||!value.includes(":"))return null;
+    const [h,m]=value.split(":").map(Number);
+    return h*60+m;
+  }
+  function mealMinute(meal){
+    const parsed=parseMinutes(meal.time);
+    return parsed===null?0:parsed;
+  }
+
+  function preWorkoutReadiness(){
+    const routine=todayRoutine();
+    if(!routine||routine.mode==="rest"){
+      return{status:"rest",color:"#94a3b8",label:"Día de descanso",score:100,message:"Hoy no tenés un entrenamiento programado.",carbs:0,protein:0,lastMeal:null,hours:null}
+    }
+    const workoutMinute=parseMinutes(routine.workoutTime||"18:30");
+    const now=new Date(),nowMinute=now.getHours()*60+now.getMinutes();
+    const reference=workoutMinute??nowMinute;
+    const meals=mealsForDate(iso()).filter(m=>mealMinute(m)<=reference);
+    const recent=meals.filter(m=>reference-mealMinute(m)<=240&&reference-mealMinute(m)>=0);
+    const carbs=recent.reduce((a,m)=>a+(+m.carbs||0),0);
+    const protein=recent.reduce((a,m)=>a+(+m.protein||0),0);
+    const body=latestBody()||{},weight=+body.weight||70.4;
+    const carbTarget=Math.max(25,Math.round(weight*.55));
+    const proteinTarget=Math.max(18,Math.round(weight*.27));
+    const last=meals.slice().sort((a,b)=>mealMinute(b)-mealMinute(a))[0]||null;
+    const hours=last?(reference-mealMinute(last))/60:null;
+    const carbRatio=carbs/carbTarget,proteinRatio=protein/proteinTarget;
+    let status="green",color="#22c55e",label="Listo para entrenar",score=Math.round(Math.min(1,(carbRatio*.65+proteinRatio*.35))*100),message="";
+    if(!last||hours>5||carbRatio<.4){
+      status="red";color="#ef4444";label="Combustible insuficiente";
+      const missing=Math.max(0,carbTarget-Math.round(carbs));
+      message=`Te convendría sumar aproximadamente ${missing} g de carbohidratos y una fuente de proteína antes de entrenar.`;
+    }else if(carbRatio<.8||proteinRatio<.65||hours>3.5){
+      status="yellow";color="#f59e0b";label="Podrías llegar mejor";
+      const missingC=Math.max(0,carbTarget-Math.round(carbs)),missingP=Math.max(0,proteinTarget-Math.round(protein));
+      message=`Sumaría ${missingC?`${missingC} g de carbohidratos`:"algo de energía rápida"}${missingP?` y cerca de ${missingP} g de proteína`:""} antes del entrenamiento.`;
+    }else{
+      message=`Tus comidas previas aportan una base adecuada de carbohidratos y proteína para este entrenamiento.`;
+    }
+    return{status,color,label,score,message,carbs:Math.round(carbs),protein:Math.round(protein),carbTarget,proteinTarget,lastMeal:last,hours,workoutTime:routine.workoutTime||"18:30"}
+  }
+
+  function renderPreWorkoutCard(){
+    const todayCard=document.querySelector(".today-card");
+    if(!todayCard)return;
+    let card=document.getElementById("preWorkoutReadinessCard");
+    if(!card){
+      card=document.createElement("div");
+      card.id="preWorkoutReadinessCard";
+      card.className="preworkout-card";
+      const actions=todayCard.querySelector(".actions");
+      todayCard.insertBefore(card,actions);
+    }
+    const r=preWorkoutReadiness();
+    card.style.setProperty("--ready-color",r.color);
+    card.innerHTML=`
+      <div class="preworkout-head">
+        <div>
+          <div class="row-title">Preparación nutricional</div>
+          <div class="row-sub">${r.workoutTime?`Entrenamiento previsto: ${r.workoutTime}`:"Evaluación de hoy"}</div>
+        </div>
+        <span class="readiness-badge"><i class="readiness-dot"></i>${r.label}</span>
+      </div>
+      ${r.status==="rest"?`<div class="preworkout-suggestion">${r.message}</div>`:`
+      <div class="preworkout-grid">
+        <div class="preworkout-metric"><span>Carbohidratos previos</span><strong>${r.carbs} / ${r.carbTarget} g</strong></div>
+        <div class="preworkout-metric"><span>Proteína previa</span><strong>${r.protein} / ${r.proteinTarget} g</strong></div>
+        <div class="preworkout-metric"><span>Última comida</span><strong>${r.lastMeal?(r.hours<1?`${Math.round(r.hours*60)} min`:`${r.hours.toFixed(1)} h`):"Sin registro"}</strong></div>
+      </div>
+      <div class="preworkout-suggestion">${r.message}</div>`}
+    `;
+  }
+
+  function remainingMealGuidance(slotType){
+    const targets=nutritionTargets(),totals=nutritionTotals(),meals=mealsForDate();
+    const remaining={
+      calories:Math.max(0,targets.calories-totals.calories),
+      protein:Math.max(0,targets.protein-totals.protein),
+      carbs:Math.max(0,targets.carbs-totals.carbs),
+      fat:Math.max(0,targets.fat-totals.fat)
+    };
+    const slotIndex=MEAL_SLOTS.findIndex(s=>s.type===slotType);
+    const futureRequired=REQUIRED_MEALS.filter(type=>{
+      const index=MEAL_SLOTS.findIndex(s=>s.type===type);
+      return index>=slotIndex&&!meals.some(m=>m.type===type)
+    }).length||1;
+    const protein=Math.round(remaining.protein/futureRequired);
+    const carbs=Math.round(remaining.carbs/futureRequired);
+    const calories=Math.round(remaining.calories/futureRequired);
+    const priorities=[
+      {name:"proteína",value:remaining.protein/Math.max(1,targets.protein)},
+      {name:"carbohidratos",value:remaining.carbs/Math.max(1,targets.carbs)},
+      {name:"grasas",value:remaining.fat/Math.max(1,targets.fat)}
+    ].sort((a,b)=>b.value-a.value);
+    return{
+      text:`Para acercarte al objetivo del día, apuntaría aproximadamente a ${calories} kcal, ${protein} g de proteína y ${carbs} g de carbohidratos en esta comida.`,
+      priority:`La prioridad actual es ${priorities[0].name}.`,
+      calories,protein,carbs
+    };
+  }
+
+  function enhanceTimelineGuidance(){
+    document.querySelectorAll(".timeline-slot").forEach((slot,index)=>{
+      const type=MEAL_SLOTS[index]?.type;
+      if(!type||slot.querySelector(".meal-guidance"))return;
+      const guidance=remainingMealGuidance(type);
+      const meals=slot.querySelector(".slot-meals");
+      if(meals)meals.insertAdjacentHTML("beforebegin",`<div class="meal-guidance">${guidance.priority} ${guidance.text}</div>`);
+    });
+  }
+
+  function addComposerGuidance(){
+    const textarea=document.getElementById("mealDescriptionPro");
+    if(!textarea||document.getElementById("composerMealGuidance"))return;
+    textarea.insertAdjacentHTML("beforebegin",`<div class="composer-guidance" id="composerMealGuidance"></div>`);
+  }
+
+  function updateComposerGuidance(){
+    const box=document.getElementById("composerMealGuidance");
+    if(!box)return;
+    const type=document.getElementById("mealTypePro")?.value||"Desayuno";
+    const guidance=remainingMealGuidance(type);
+    box.innerHTML=`<div class="row-title">Guía inteligente para ${type.toLowerCase()}</div><div class="row-sub">${guidance.priority} ${guidance.text}</div>`;
+  }
+
+  const originalRenderHomeV3=renderHome;
+  renderHome=function(){
+    originalRenderHomeV3();
+    renderPreWorkoutCard();
+  };
+
+  const originalRenderNutritionV3=renderNutrition;
+  renderNutrition=function(){
+    originalRenderNutritionV3();
+    enhanceTimelineGuidance();
+  };
+
+  document.addEventListener("click",event=>{
+    const add=event.target.closest("[data-add-slot]");
+    if(add)setTimeout(updateComposerGuidance,0);
+  },true);
+  document.addEventListener("change",event=>{
+    if(event.target?.id==="mealTypePro")updateComposerGuidance();
+  });
+
+  ensureWorkoutTimes();
+  addWorkoutTimeField();
+  addComposerGuidance();
+  renderAll();
+})();
+</script>
+
+
+<script id="primeRealtimeAIAddon">
+(() => {
+  "use strict";
+
+  function readinessContext(){
+    const routine=todayRoutine(),body=latestBody()||{},local=preWorkoutReadiness();
+    return{
+      date:iso(),
+      current_time:new Date().toTimeString().slice(0,5),
+      workout:{
+        scheduled_time:routine?.workoutTime||null,
+        mode:routine?.mode||"rest",
+        muscle_group:routine?.muscle||null,
+        estimated_duration:estimateRoutine(routine).duration
+      },
+      body:{weight_kg:+body.weight||70.4,height_cm:+body.height||184},
+      local_readiness:local,
+      meals:mealsForDate(iso()).map(m=>({time:m.time,type:m.type,description:m.description,calories:m.calories,protein_g:m.protein,carbs_g:m.carbs,fat_g:m.fat})),
+      daily_targets:nutritionTargets(),
+      daily_totals:nutritionTotals(iso())
+    }
+  }
+
+  async function requestPreWorkoutAI(){
+    const button=document.getElementById("preWorkoutAIButton");
+    if(button){button.disabled=true;button.textContent="Analizando..."}
+    try{
+      const result=await callSmartHandler({action:"preworkout_readiness",context:readinessContext()});
+      data.aiInsights.preworkout=data.aiInsights.preworkout||{};
+      data.aiInsights.preworkout[iso()]=result.readiness;
+      save();renderHome();toast("Preparación analizada con IA");
+    }catch(error){toast(error.message||"No se pudo analizar la preparación")}finally{
+      if(button){button.disabled=false;button.textContent="Refinar con IA"}
+    }
+  }
+
+  const originalRenderPreWorkout=renderPreWorkoutCard;
+  renderPreWorkoutCard=function(){
+    originalRenderPreWorkout();
+    const card=document.getElementById("preWorkoutReadinessCard");if(!card)return;
+    const ai=data.aiInsights?.preworkout?.[iso()];
+    const suggestion=card.querySelector(".preworkout-suggestion");
+    if(ai&&suggestion){
+      suggestion.innerHTML=`<strong>${ai.headline||"Análisis IA"}:</strong> ${ai.reason||""}${ai.recommendations?.length?`<br><span class="row-sub">${ai.recommendations.map(r=>r.option).join(" · ")}</span>`:""}`;
+      card.style.setProperty("--ready-color",ai.status==="green"?"#22c55e":ai.status==="red"?"#ef4444":"#f59e0b");
+    }
+    if(!document.getElementById("preWorkoutAIButton")){
+      card.insertAdjacentHTML("beforeend",`<button class="slot-action" id="preWorkoutAIButton" style="margin-top:10px">Refinar con IA</button>`);
+      document.getElementById("preWorkoutAIButton").onclick=requestPreWorkoutAI;
+    }
+  };
+
+  async function requestNextMealAI(slotType){
+    const key=`${iso(nutritionDate)}:${slotType}`;
+    const local=remainingMealGuidance(slotType);
+    try{
+      const result=await callSmartHandler({
+        action:"next_meal_guidance",
+        context:{
+          date:iso(nutritionDate),
+          current_time:new Date().toTimeString().slice(0,5),
+          next_meal:slotType,
+          targets:nutritionTargets(),
+          totals:nutritionTotals(),
+          remaining:local,
+          meals:mealsForDate().map(m=>({type:m.type,time:m.time,description:m.description,calories:m.calories,protein_g:m.protein,carbs_g:m.carbs,fat_g:m.fat})),
+          workout:todayRoutine()?{time:todayRoutine().workoutTime,mode:todayRoutine().mode,muscle:todayRoutine().muscle}:null
+        }
+      });
+      data.aiInsights.nextMeal=data.aiInsights.nextMeal||{};
+      data.aiInsights.nextMeal[key]=result.guidance;save();renderNutrition();toast("Guía de comida actualizada");
+    }catch(error){toast(error.message||"No se pudo generar la guía")}
+  }
+
+  const originalEnhanceTimeline=enhanceTimelineGuidance;
+  enhanceTimelineGuidance=function(){
+    originalEnhanceTimeline();
+    document.querySelectorAll(".timeline-slot").forEach((slot,index)=>{
+      const type=MEAL_SLOTS[index]?.type,box=slot.querySelector(".meal-guidance");if(!type||!box)return;
+      const stored=data.aiInsights?.nextMeal?.[`${iso(nutritionDate)}:${type}`];
+      if(stored)box.innerHTML=`<strong>${stored.headline||"Guía IA"}:</strong> ${stored.summary||""}${stored.target_for_meal?` Objetivo aproximado: ${stored.target_for_meal.calories} kcal, ${stored.target_for_meal.protein_g} g proteína y ${stored.target_for_meal.carbs_g} g carbohidratos.`:""}`;
+      if(!box.querySelector("button")){
+        box.insertAdjacentHTML("beforeend",`<br><button class="slot-action" data-next-meal-ai="${type}" style="margin-top:7px">Mejorar con IA</button>`);
+      }
+    });
+    document.querySelectorAll("[data-next-meal-ai]").forEach(btn=>btn.onclick=()=>requestNextMealAI(btn.dataset.nextMealAi));
+  };
+
   renderAll();
 })();
 </script>
