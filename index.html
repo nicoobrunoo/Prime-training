@@ -282,7 +282,114 @@ body.compact .section{padding:13px}body.compact .card{border-radius:20px}body.co
 @keyframes completedIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
 @keyframes completedPop{0%{transform:scale(.55) rotate(-10deg)}65%{transform:scale(1.16) rotate(4deg)}100%{transform:scale(1)}}
 
+
+/* ===== ALIMENTACIÓN ===== */
+.nutrition-hero{
+  padding:18px;margin-bottom:14px;overflow:hidden;position:relative;
+  background:
+    radial-gradient(circle at 90% 0%,rgba(245,158,11,.18),transparent 35%),
+    radial-gradient(circle at 0% 100%,rgba(34,197,94,.12),transparent 34%),
+    linear-gradient(135deg,#132435,#172234 55%,#31220f);
+}
+.nutrition-date{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.nutrition-date strong{font-size:1.05rem;text-transform:capitalize}
+.macro-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.macro-card{
+  padding:13px;border:1px solid #294056;border-radius:17px;
+  background:linear-gradient(180deg,#15273a,#101d2c)
+}
+.macro-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.macro-label{display:flex;align-items:center;gap:7px;color:#b7c2cc;font-size:.73rem}
+.macro-value{font-size:.76rem;font-weight:900}
+.macro-bar{height:9px;border-radius:999px;background:#26394b;overflow:hidden;margin-top:10px}
+.macro-fill{height:100%;border-radius:inherit;transition:width .55s cubic-bezier(.2,.8,.25,1)}
+.macro-card.calories .macro-fill{background:linear-gradient(90deg,#f59e0b,#fb7185)}
+.macro-card.protein .macro-fill{background:linear-gradient(90deg,#8b5cf6,#d946ef)}
+.macro-card.carbs .macro-fill{background:linear-gradient(90deg,#3b82f6,#22d3ee)}
+.macro-card.fat .macro-fill{background:linear-gradient(90deg,#22c55e,#84cc16)}
+.macro-card.over .macro-fill{background:linear-gradient(90deg,#ef4444,#f97316)}
+.meal-composer{
+  padding:15px;margin-bottom:14px;background:
+    radial-gradient(circle at 100% 0%,rgba(139,92,246,.12),transparent 35%),
+    linear-gradient(180deg,#122235,#0f1d2c)
+}
+.meal-textarea{min-height:104px;text-align:left;resize:vertical;line-height:1.45}
+.meal-examples{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.meal-example{
+  border:1px solid #2d4358;background:#142539;color:#aebac5;
+  border-radius:999px;padding:7px 9px;font-size:.66rem
+}
+.ai-result{
+  display:none;margin-top:12px;padding:13px;border-radius:17px;
+  background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.24)
+}
+.ai-result.show{display:block;animation:contentRise .3s ease}
+.ai-result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.ai-estimate{padding:10px;border-radius:13px;background:#132337;border:1px solid #2a4055}
+.ai-estimate span{display:block;color:var(--muted);font-size:.66rem}
+.ai-estimate strong{display:block;margin-top:4px;font-size:1rem}
+.confidence{
+  display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:6px 8px;
+  font-size:.65rem;font-weight:900;background:rgba(34,197,94,.11);color:#70e584
+}
+.meal-group{margin-bottom:14px}
+.meal-group-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.meal-item{
+  padding:13px;border-radius:17px;background:#112132;border:1px solid #263c51;margin-bottom:8px;
+  animation:contentRise .3s ease
+}
+.meal-item-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.meal-name{font-weight:900}.meal-time{font-size:.67rem;color:var(--muted);margin-top:3px}
+.meal-macros{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.macro-chip{font-size:.64rem;padding:6px 8px;border-radius:999px;background:#17283a;color:#aeb9c4}
+.nutrition-settings{
+  padding:14px;border-radius:18px;border:1px solid #2a4157;
+  background:linear-gradient(180deg,#132437,#0f1d2c)
+}
+.goal-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:10px}
+.goal-box{padding:11px;border-radius:14px;background:#15273a;border:1px solid #284056}
+.goal-box span{display:block;font-size:.66rem;color:var(--muted)}.goal-box strong{display:block;margin-top:4px}
+.food-dictionary-note{font-size:.69rem;color:var(--muted);line-height:1.45;margin-top:8px}
+@media(min-width:700px){
+  .macro-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .ai-result-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+
+
+/* ===== SUPABASE CLOUD ===== */
+.cloud-status{display:flex;align-items:center;gap:8px;padding:11px 12px;border-radius:14px;background:#112132;border:1px solid var(--line);margin:8px 0}
+.cloud-dot{width:9px;height:9px;border-radius:50%;background:#64748b;box-shadow:0 0 0 4px rgba(100,116,139,.12)}
+.cloud-status.online .cloud-dot{background:var(--green);box-shadow:0 0 0 4px rgba(34,197,94,.12)}
+.cloud-status.syncing .cloud-dot{background:var(--orange);animation:pulseCloud 1s infinite}
+.cloud-status.error .cloud-dot{background:var(--red)}
+.cloud-copy{min-width:0;flex:1}.cloud-copy strong{display:block;font-size:.78rem}.cloud-copy small{display:block;color:var(--muted);font-size:.66rem;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.auth-message{font-size:.72rem;color:var(--muted);line-height:1.45;margin-top:9px}
+.ai-connection{display:flex;align-items:center;gap:7px;font-size:.67rem;font-weight:900;border-radius:999px;padding:6px 9px;background:rgba(100,116,139,.12);color:#9eacb8}
+.ai-connection.online{background:rgba(34,197,94,.11);color:#70e584}.ai-connection.error{background:rgba(239,68,68,.12);color:#ff8585}.ai-connection.loading{background:rgba(245,158,11,.12);color:#fbbf24}
+@keyframes pulseCloud{50%{opacity:.45;transform:scale(.85)}}
+
 </style>
+
+<style id="primeNutritionProStyles">
+.nutrition-dashboard{padding:16px;margin-bottom:12px;overflow:hidden;position:relative;background:radial-gradient(circle at 100% 0%,rgba(245,158,11,.18),transparent 34%),radial-gradient(circle at 0% 100%,rgba(34,197,94,.11),transparent 32%),linear-gradient(145deg,#142638,#172536 58%,#34230f)}
+.nutrition-header-row{display:flex;align-items:center;justify-content:space-between;gap:9px}.nutrition-day-title{font-weight:950;text-transform:capitalize}.nutrition-mode{color:#ffd081;font-size:.69rem;margin-top:3px}
+.nutrition-completion{display:grid;grid-template-columns:48px 1fr;gap:10px;align-items:center;margin-top:13px;padding:11px;border-radius:16px;border:1px solid rgba(255,255,255,.09);background:rgba(4,12,22,.25)}
+.mini-ring{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--green) calc(var(--complete,0)*1%),rgba(255,255,255,.09) 0);position:relative;font-weight:950;font-size:.7rem}.mini-ring:before{content:"";position:absolute;inset:5px;border-radius:50%;background:#142334}.mini-ring span{position:relative}
+.meal-timeline{position:relative;padding-left:22px}.meal-timeline:before{content:"";position:absolute;left:8px;top:12px;bottom:12px;width:2px;background:linear-gradient(var(--purple),var(--orange),var(--green));opacity:.45}
+.timeline-slot{position:relative;margin-bottom:11px}.timeline-slot:before{content:"";position:absolute;left:-19px;top:20px;width:12px;height:12px;border-radius:50%;background:#1c3044;border:2px solid #59728a;z-index:1}.timeline-slot.complete:before{background:var(--green);border-color:#7bef8d;box-shadow:0 0 0 5px rgba(34,197,94,.1)}.timeline-slot.optional:before{width:9px;height:9px;left:-17px;top:18px;border-color:#a174ff}
+.slot-card{border:1px solid #294258;border-radius:19px;background:linear-gradient(180deg,#132438,#0f1d2c);overflow:hidden;transition:.2s ease}.slot-card:hover{border-color:#3a5874}
+.slot-head{display:flex;justify-content:space-between;align-items:center;gap:9px;padding:12px 13px;background:rgba(255,255,255,.015)}.slot-title{display:flex;align-items:center;gap:8px;font-weight:950}.slot-status{font-size:.65rem;color:var(--muted)}.slot-actions{display:flex;gap:6px}.slot-action{border:1px solid #30485d;background:#17283a;color:#b1bdc8;border-radius:10px;padding:7px 9px;font-size:.65rem;font-weight:850}
+.slot-meals{padding:0 12px 11px}.timeline-meal{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-top:1px solid #263d51}.timeline-meal-main{min-width:0}.timeline-meal-title{font-weight:850;font-size:.82rem}.timeline-meal-sub{font-size:.68rem;color:var(--muted);margin-top:4px;line-height:1.4}.timeline-meal-macros{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.library-toolbar{display:flex;gap:8px;margin-bottom:12px}.library-search{flex:1;text-align:left}.library-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.library-card{padding:12px;border:1px solid #294258;border-radius:17px;background:linear-gradient(180deg,#14263a,#101e2e);min-width:0}.library-card h4{margin:0;font-size:.82rem}.library-card p{margin:5px 0 0;color:var(--muted);font-size:.68rem;line-height:1.35}.library-card-actions{display:grid;grid-template-columns:1fr auto;gap:6px;margin-top:10px}
+.objective-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px}.objective-option{border:1px solid #2c4358;background:#122235;color:#9baab7;border-radius:15px;padding:12px 7px;text-align:center;font-size:.68rem;font-weight:900}.objective-option.active{color:#fff;border-color:#936cff;background:linear-gradient(135deg,rgba(139,92,246,.28),rgba(217,70,239,.17))}
+.ai-precision-panel{margin-top:11px;padding:12px;border-radius:16px;border:1px solid rgba(139,92,246,.25);background:rgba(139,92,246,.07)}.ai-items-list{display:grid;gap:6px;margin-top:9px}.ai-item-row{display:flex;justify-content:space-between;gap:9px;padding:8px 9px;border-radius:11px;background:#142538;border:1px solid #294157;font-size:.69rem}
+.clarification-box{display:none;margin-top:10px;padding:11px;border-radius:14px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.24)}.clarification-box.show{display:block}
+.nutrition-ai-review{padding:12px;border:1px solid rgba(34,211,238,.23);border-radius:17px;background:linear-gradient(180deg,rgba(34,211,238,.075),rgba(12,27,40,.88));margin-bottom:12px}
+.rest-day-card{display:flex;align-items:center;gap:11px;padding:14px;border-radius:18px;background:linear-gradient(135deg,rgba(100,116,139,.13),rgba(15,23,42,.6));border:1px solid #34495d}.rest-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:#1a2a3b;color:#9fb0bf}
+.day.rest .day-number{background:#26384a;color:#adbac5}.day.rest .day-dot{background:#8191a0}.day-mode-selector{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.day-mode-btn{border:1px solid #2b4257;background:#122235;color:#9cabb8;border-radius:14px;padding:11px;font-weight:900}.day-mode-btn.active{color:#fff;border-color:#8560df;background:rgba(139,92,246,.15)}
+@media(max-width:520px){.library-grid{grid-template-columns:1fr}.objective-selector{grid-template-columns:1fr}.slot-head{align-items:flex-start}.slot-actions{flex-direction:column}}
+</style>
+
 </head>
 <body>
 <svg style="display:none">
@@ -314,6 +421,8 @@ body.compact .section{padding:13px}body.compact .card{border-radius:20px}body.co
 <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
 <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M8 4h8v4a4 4 0 0 1-8 0z"/><path d="M8 6H4v2a4 4 0 0 0 4 4M16 6h4v2a4 4 0 0 1-4 4M12 12v5M8 21h8M9 17h6"/></symbol>
 <symbol id="i-cardio" viewBox="0 0 24 24"><path d="M3 12h4l2-5 4 10 2-5h6"/><path d="M5 20h14"/></symbol>
+<symbol id="i-food" viewBox="0 0 24 24"><path d="M4 3v8a3 3 0 0 0 3 3v7M10 3v8M7 3v8M14 3v18M14 10c4 0 6-3 6-7v18"/></symbol>
+<symbol id="i-brain" viewBox="0 0 24 24"><path d="M9 4a3 3 0 0 0-5 2.2A3.5 3.5 0 0 0 4 13a3 3 0 0 0 3 5h2M15 4a3 3 0 0 1 5 2.2A3.5 3.5 0 0 1 20 13a3 3 0 0 1-3 5h-2M9 4v16M15 4v16M9 8h3M12 14h3"/></symbol>
 </svg>
 
 <div class="toast" id="toast"></div>
@@ -326,9 +435,16 @@ body.compact .section{padding:13px}body.compact .card{border-radius:20px}body.co
     <span class="drawer-avatar"><span id="drawerInitials">NB</span><img id="drawerPhoto" hidden></span>
     <span style="text-align:left"><strong id="drawerName">Nicolás</strong><small id="drawerGoal">Proyecto Prime</small></span>
   </button>
-  <div class="drawer-label">Apariencia</div>
+  <div class="drawer-label">Seguimiento</div>
+  <button class="drawer-item" id="drawerProgressBtn">
+    <span class="drawer-item-main"><svg><use href="#i-chart"/></svg><span><strong>Progreso</strong><small>Ejercicios, cuerpo y récords</small></span></span>
+  </button>
+<div class="drawer-label">Apariencia</div>
   <button class="drawer-item" id="themeToggle"><span class="drawer-item-main"><svg><use href="#i-moon"/></svg><span><strong>Modo claro</strong><small>Cambiar tema</small></span></span><span class="switch" id="themeSwitch"></span></button>
   <button class="drawer-item" id="compactToggle"><span class="drawer-item-main"><svg><use href="#i-layers"/></svg><span><strong>Vista compacta</strong><small>Más contenido visible</small></span></span><span class="switch" id="compactSwitch"></span></button>
+  <div class="drawer-label">Nube</div>
+  <div class="cloud-status" id="cloudStatus"><span class="cloud-dot"></span><span class="cloud-copy"><strong id="cloudStatusTitle">Sin sesión</strong><small id="cloudStatusText">Tus datos están solo en este dispositivo</small></span></div>
+  <button class="drawer-item" id="cloudAccountBtn"><span class="drawer-item-main"><svg><use href="#i-user"/></svg><span><strong>Cuenta y sincronización</strong><small>Guardar todo en Supabase</small></span></span></button>
   <div class="drawer-label">Datos</div>
   <button class="drawer-item" id="exportBtn"><span class="drawer-item-main"><svg><use href="#i-download"/></svg><span><strong>Exportar copia</strong><small>Rutinas, sesiones y medidas</small></span></span></button>
   <label class="drawer-item"><span class="drawer-item-main"><svg><use href="#i-upload"/></svg><span><strong>Importar copia</strong><small>Restaurar tus datos</small></span></span><input type="file" id="importInput" accept=".json" hidden></label>
@@ -399,6 +515,65 @@ body.compact .section{padding:13px}body.compact .card{border-radius:20px}body.co
   <article class="card section" id="progressContent"></article>
 </section>
 
+
+<section class="page" id="nutritionPage">
+  <div class="page-head">
+    <div class="page-title">ALIMENTACIÓN</div>
+    <button class="icon-button" id="nutritionSettingsBtn"><svg><use href="#i-settings"/></svg></button>
+  </div>
+
+  <article class="card nutrition-hero">
+    <div class="nutrition-date">
+      <button class="icon-button" id="nutritionPrev"><svg><use href="#i-left"/></svg></button>
+      <div style="text-align:center">
+        <strong id="nutritionDateLabel"></strong>
+        <div class="caption" id="nutritionGoalLabel"></div>
+      </div>
+      <button class="icon-button" id="nutritionNext"><svg><use href="#i-right"/></svg></button>
+    </div>
+    <div class="macro-grid" id="macroProgress"></div>
+  </article>
+
+  <article class="card meal-composer">
+    <div class="heading-row">
+      <h2 class="heading"><svg style="color:#c58cff"><use href="#i-brain"/></svg>REGISTRAR COMIDA</h2>
+      <span class="ai-connection loading" id="aiModeBadge">Comprobando IA...</span>
+    </div>
+    <textarea class="field meal-textarea" id="mealDescription" placeholder="Ejemplo: comí una milanesa de pollo al horno con 250 g de puré y una ensalada de tomate..."></textarea>
+    <div class="meal-examples">
+      <button class="meal-example" data-meal-example="3 huevos con 2 tostadas integrales">Desayuno habitual</button>
+      <button class="meal-example" data-meal-example="1 scoop de whey con 250 ml de leche proteica">Whey + leche</button>
+      <button class="meal-example" data-meal-example="milanesa de pollo con puré de papa">Milanesa con puré</button>
+    </div>
+    <div class="form-grid" style="margin-top:10px">
+      <div class="form-group"><label>Tipo de comida</label>
+        <select class="field" id="mealType">
+          <option>Desayuno</option><option>Almuerzo</option><option>Merienda</option><option>Cena</option><option>Snack</option><option>Post entrenamiento</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Hora</label><input class="field" id="mealTime" type="time"></div>
+    </div>
+    <button class="btn btn-primary" id="analyzeMealBtn" style="width:100%;margin-top:10px"><svg><use href="#i-spark"/></svg>Analizar comida</button>
+
+    <div class="ai-result" id="aiMealResult">
+      <div class="heading-row"><div><div class="row-title">Estimación nutricional</div><div class="row-sub" id="aiExplanation"></div></div><span class="confidence" id="aiConfidence"></span></div>
+      <div class="ai-result-grid">
+        <div class="ai-estimate"><span>Calorías</span><input class="field" id="estimatedCalories" type="number"></div>
+        <div class="ai-estimate"><span>Proteínas (g)</span><input class="field" id="estimatedProtein" type="number" step=".1"></div>
+        <div class="ai-estimate"><span>Carbohidratos (g)</span><input class="field" id="estimatedCarbs" type="number" step=".1"></div>
+        <div class="ai-estimate"><span>Grasas (g)</span><input class="field" id="estimatedFat" type="number" step=".1"></div>
+      </div>
+      <div class="food-dictionary-note">La estimación es editable. Para mayor precisión indicá gramos, unidades, marca y método de cocción.</div>
+      <button class="btn btn-primary" id="saveMealBtn" style="width:100%;margin-top:10px"><svg><use href="#i-check"/></svg>Guardar comida</button>
+    </div>
+  </article>
+
+  <article class="card section">
+    <div class="heading-row"><h2 class="heading"><svg style="color:var(--orange)"><use href="#i-food"/></svg>COMIDAS DEL DÍA</h2><span class="caption" id="mealCountLabel"></span></div>
+    <div id="dailyMeals"></div>
+  </article>
+</section>
+
 <section class="page" id="reportsPage">
   <div class="page-head"><div class="page-title">REPORTE SEMANAL</div><span class="caption" id="reportWeek"></span></div>
   <div class="report-grid" id="reportMetrics"></div>
@@ -417,9 +592,29 @@ body.compact .section{padding:13px}body.compact .card{border-radius:20px}body.co
   <button class="nav active" data-page="homePage"><svg><use href="#i-home"/></svg><span>Hoy</span></button>
   <button class="nav" data-page="routinePage"><svg><use href="#i-dumbbell"/></svg><span>Rutina</span></button>
   <button class="nav" data-page="calendarPage"><svg><use href="#i-calendar"/></svg><span>Calendario</span></button>
-  <button class="nav" data-page="progressPage"><svg><use href="#i-chart"/></svg><span>Progreso</span></button>
+  <button class="nav" data-page="nutritionPage"><svg><use href="#i-food"/></svg><span>Alimentación</span></button>
   <button class="nav" data-page="reportsPage"><svg><use href="#i-report"/></svg><span>Reportes</span></button>
 </nav>
+
+
+<div class="modal" id="cloudAccountModal"><div class="sheet">
+  <div class="sheet-head"><div class="sheet-title">Cuenta y sincronización</div><button class="icon-button" data-close="cloudAccountModal"><svg><use href="#i-x"/></svg></button></div>
+  <div id="signedOutPanel">
+    <div class="form-grid">
+      <div class="form-group" style="grid-column:1/-1"><label>Email</label><input class="field" id="authEmail" type="email" autocomplete="email" placeholder="tu@email.com"></div>
+      <div class="form-group" style="grid-column:1/-1"><label>Contraseña</label><input class="field" id="authPassword" type="password" autocomplete="current-password" minlength="6" placeholder="Mínimo 6 caracteres"></div>
+    </div>
+    <button class="btn btn-primary" id="loginBtn" style="width:100%;margin-top:10px">Iniciar sesión</button>
+    <button class="btn btn-soft" id="registerBtn" style="width:100%;margin-top:8px">Crear cuenta</button>
+    <div class="auth-message">Con una cuenta, la rutina, sesiones, medidas, comidas, perfil, objetivos y configuración se sincronizan entre dispositivos.</div>
+  </div>
+  <div id="signedInPanel" hidden>
+    <div class="cloud-status online"><span class="cloud-dot"></span><span class="cloud-copy"><strong id="signedInEmail"></strong><small>Datos protegidos con Row Level Security</small></span></div>
+    <button class="btn btn-primary" id="syncNowBtn" style="width:100%;margin-top:8px">Sincronizar ahora</button>
+    <button class="btn btn-soft" id="loadCloudBtn" style="width:100%;margin-top:8px">Descargar datos de la nube</button>
+    <button class="btn btn-danger" id="logoutBtn" style="width:100%;margin-top:8px">Cerrar sesión</button>
+  </div>
+</div></div>
 
 <div class="modal" id="profileModal"><div class="sheet">
   <div class="sheet-head"><div class="sheet-title">Mi perfil</div><button class="icon-button" data-close="profileModal"><svg><use href="#i-x"/></svg></button></div>
@@ -457,16 +652,40 @@ body.compact .section{padding:13px}body.compact .card{border-radius:20px}body.co
   <button class="btn btn-soft" id="addExerciseBtn" style="width:100%;margin-top:8px"><svg><use href="#i-plus"/></svg>Agregar ejercicio</button><button class="btn btn-primary" id="saveRoutineBtn" style="width:100%;margin-top:8px">Guardar rutina</button>
 </div></div>
 
+
+<div class="modal" id="nutritionSettingsModal"><div class="sheet">
+  <div class="sheet-head"><div class="sheet-title">Objetivos nutricionales</div><button class="icon-button" data-close="nutritionSettingsModal"><svg><use href="#i-x"/></svg></button></div>
+  <div class="form-grid">
+    <div class="form-group"><label>Edad</label><input class="field" id="nutritionAge" type="number" min="14" max="100"></div>
+    <div class="form-group"><label>Sexo para el cálculo</label><select class="field" id="nutritionSex"><option value="male">Masculino</option><option value="female">Femenino</option></select></div>
+    <div class="form-group"><label>Actividad diaria</label><select class="field" id="nutritionActivity"><option value="1.2">Sedentaria</option><option value="1.375">Ligera</option><option value="1.55">Moderada</option><option value="1.725">Alta</option><option value="1.9">Muy alta</option></select></div>
+    <div class="form-group"><label>Objetivo</label><select class="field" id="nutritionGoal"><option value="cut">Perder grasa</option><option value="maintain">Mantener</option><option value="gain">Ganar músculo</option></select></div>
+    <div class="form-group"><label>Proteína (g/kg)</label><input class="field" id="proteinPerKg" type="number" step=".1" min="1" max="3"></div>
+    <div class="form-group"><label>Déficit / superávit (%)</label><input class="field" id="calorieAdjustment" type="number" min="0" max="30"></div>
+  </div>
+  <div class="nutrition-settings" style="margin-top:12px">
+    <div class="row-title">Objetivos calculados</div>
+    <div class="goal-summary" id="nutritionGoalPreview"></div>
+  </div>
+  <button class="btn btn-primary" id="saveNutritionSettingsBtn" style="width:100%;margin-top:10px">Guardar objetivos</button>
+</div></div>
+
 <div class="modal" id="calendarDetailModal"><div class="sheet">
   <div class="sheet-head"><div class="sheet-title" id="calendarDetailTitle"></div><button class="icon-button" data-close="calendarDetailModal"><svg><use href="#i-x"/></svg></button></div>
   <div id="calendarDetailContent"></div>
 </div></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 "use strict";
 const KEY="prime-training-clean-v1",LEGACY_KEY="prime-training-dark-v1",PROFILE_KEY="prime-training-profile-v2",UI_KEY="prime-training-ui-v2";
-const PAGE_IDS=["homePage","routinePage","calendarPage","progressPage","reportsPage"];
-const PAGE_COLORS={homePage:"#8b5cf6",routinePage:"#22d3ee",calendarPage:"#22c55e",progressPage:"#3b82f6",reportsPage:"#f59e0b"};
+const SUPABASE_URL="https://dquhzjkaguwxchbwigap.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_B34hIIpOQVp81JwMLzmTvQ_7F5GIxEl";
+const SMART_HANDLER_URL=`${SUPABASE_URL}/functions/v1/smart-handler`;
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+let currentUser=null,cloudSyncTimer=null,cloudSyncing=false,lastCloudSync=null;
+const PAGE_IDS=["homePage","routinePage","calendarPage","nutritionPage","reportsPage"];
+const PAGE_COLORS={homePage:"#8b5cf6",routinePage:"#22d3ee",calendarPage:"#22c55e",nutritionPage:"#f59e0b",reportsPage:"#f97316"};
 const defaults={routine:[
 {day:1,name:"Lunes",muscle:"Pecho, hombros y tríceps",exercises:[["press-plano","Press plano",4,8,10,40,120,2],["press-inclinado","Press inclinado",4,8,10,16,100,2],["laterales","Elevaciones laterales",4,12,15,8,60,2],["triceps","Tríceps en polea",3,10,12,20,75,2]]},
 {day:2,name:"Martes",muscle:"Espalda y bíceps",exercises:[["jalon","Jalón al pecho",4,8,12,36,100,2],["remo","Remo sentado",4,8,12,40,100,2],["martillo","Curl martillo",3,10,12,10,75,2]]},
@@ -475,7 +694,7 @@ const defaults={routine:[
 {day:5,name:"Viernes",muscle:"Hombros, brazos y piernas",exercises:[["press-militar","Press militar",4,8,10,24,100,2],["curl","Curl de bíceps",3,10,12,10,75,2],["extension","Extensión de cuádriceps",4,10,15,40,75,2]]}
 ].map(r=>({...r,exercises:r.exercises.map(x=>({id:x[0],name:x[1],sets:x[2],minReps:x[3],maxReps:x[4],weight:x[5],rest:x[6],rir:x[7],active:true}))})),sessions:[],bodyMeasurements:[{date:"2026-07-24",weight:70.4,height:184,bodyFat:14.6,waist:null,chest:null,arm:null,leg:null,neck:null,notes:"Registro inicial"}]};
 const clone=o=>JSON.parse(JSON.stringify(o));
-let data=loadData(),profile=loadProfile(),ui=loadUI(),pendingPhoto=profile.photo||"",currentMonth=new Date(),editingRoutine=-1,currentProgressTab="exercises",timerId=null,timerSeconds=0,activePage="homePage";
+let data=loadData(),profile=loadProfile(),ui=loadUI(),pendingPhoto=profile.photo||"",currentMonth=new Date(),nutritionDate=new Date(),editingRoutine=-1,currentProgressTab="exercises",timerId=null,timerSeconds=0,activePage="homePage",pendingMealEstimate=null;
 function loadData(){try{const raw=localStorage.getItem(KEY)||localStorage.getItem(LEGACY_KEY);const parsed=raw?JSON.parse(raw):clone(defaults);return normalizeData(parsed)}catch{return clone(defaults)}}
 function normalizeData(d){
   d.routine=d.routine||clone(defaults.routine);
@@ -484,15 +703,15 @@ function normalizeData(d){
     day.cardio=day.cardio||[];
   });
   d.sessions=d.sessions||[];
-  d.sessions.forEach(session=>{session.cardio=session.cardio||[]});
+  d.sessions.forEach(session=>{session.cardio=session.cardio||[]});d.meals=d.meals||[];d.nutritionSettings=d.nutritionSettings||{age:28,sex:"male",activity:1.55,goal:"maintain",proteinPerKg:1.8,adjustment:15};
   d.bodyMeasurements=d.bodyMeasurements||d.body||[];
   return d
 }
 function loadProfile(){try{return JSON.parse(localStorage.getItem(PROFILE_KEY))||{name:"Nicolás",goal:"Proyecto Prime",photo:""}}catch{return{name:"Nicolás",goal:"Proyecto Prime",photo:""}}}
 function loadUI(){try{return JSON.parse(localStorage.getItem(UI_KEY))||{light:false,compact:false}}catch{return{light:false,compact:false}}}
-function save(){localStorage.setItem(KEY,JSON.stringify(data))}
-function saveProfile(){localStorage.setItem(PROFILE_KEY,JSON.stringify(profile))}
-function saveUI(){localStorage.setItem(UI_KEY,JSON.stringify(ui))}
+function save(){localStorage.setItem(KEY,JSON.stringify(data));queueCloudSync()}
+function saveProfile(){localStorage.setItem(PROFILE_KEY,JSON.stringify(profile));queueCloudSync()}
+function saveUI(){localStorage.setItem(UI_KEY,JSON.stringify(ui));queueCloudSync()}
 function iso(d=new Date()){const x=new Date(d.getTime()-d.getTimezoneOffset()*60000);return x.toISOString().slice(0,10)}
 function fmt(n){return Number(n||0).toLocaleString("es-AR",{maximumFractionDigits:1})}
 function toast(t){const e=document.getElementById("toast");e.textContent=t;e.classList.add("show");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("show"),2100)}
@@ -748,7 +967,137 @@ function renderWorkout(){
     </article>`).join("")}`:"";
 
   document.getElementById("workoutExercises").innerHTML=strengthHtml+cardioHtml
-}function renderAll(){renderProfile();applyUI();renderHome();renderRoutine();renderCalendar();renderProgress();renderReports();if(getSession())renderWorkout()}
+}
+function nutritionTargets(){
+  const b=latestBody()||{},s=data.nutritionSettings||{};
+  const weight=Number(b.weight)||70.4,height=Number(b.height)||184,age=Number(s.age)||28;
+  let bmr=10*weight+6.25*height-5*age+(s.sex==="female"?-161:5);
+  let calories=bmr*(Number(s.activity)||1.55);
+  const adjustment=(Number(s.adjustment)||15)/100;
+  if(s.goal==="cut")calories*=1-adjustment;
+  if(s.goal==="gain")calories*=1+adjustment;
+  calories=Math.round(calories);
+  const protein=Math.round(weight*(Number(s.proteinPerKg)||1.8));
+  const fat=Math.round(weight*0.8);
+  const carbs=Math.max(0,Math.round((calories-protein*4-fat*9)/4));
+  return{calories,protein,carbs,fat,weight,height}
+}
+function mealsForDate(date=iso(nutritionDate)){return(data.meals||[]).filter(m=>m.date===date).sort((a,b)=>(a.time||"").localeCompare(b.time||""))}
+function nutritionTotals(date=iso(nutritionDate)){
+  return mealsForDate(date).reduce((a,m)=>({calories:a.calories+(+m.calories||0),protein:a.protein+(+m.protein||0),carbs:a.carbs+(+m.carbs||0),fat:a.fat+(+m.fat||0)}),{calories:0,protein:0,carbs:0,fat:0})
+}
+const FOOD_DB=[
+  {keys:["huevo","huevos"],unit:"unit",cal:72,p:6.3,c:.4,f:4.8},
+  {keys:["tostada integral","tostadas integrales"],unit:"unit",cal:78,p:3,c:14,f:1.2},
+  {keys:["banana","plátano"],unit:"unit",cal:105,p:1.3,c:27,f:.4},
+  {keys:["scoop de whey","whey","proteína en polvo"],unit:"unit",cal:120,p:24,c:3,f:2},
+  {keys:["leche proteica"],unit:"100ml",cal:55,p:6,c:5,f:1.2},
+  {keys:["leche"],unit:"100ml",cal:50,p:3.4,c:4.8,f:1.8},
+  {keys:["milanesa de pollo","milanesa de pechuga"],unit:"portion",cal:350,p:35,c:25,f:12},
+  {keys:["milanesa de carne"],unit:"portion",cal:420,p:32,c:28,f:20},
+  {keys:["milanesa de cerdo"],unit:"portion",cal:410,p:31,c:27,f:19},
+  {keys:["pechuga de pollo","pollo"],unit:"100g",cal:165,p:31,c:0,f:3.6},
+  {keys:["carne","churrasco"],unit:"100g",cal:240,p:27,c:0,f:14},
+  {keys:["arroz"],unit:"100g",cal:130,p:2.7,c:28,f:.3},
+  {keys:["puré","pure de papa","puré de papa"],unit:"100g",cal:110,p:2,c:18,f:3.5},
+  {keys:["papa","papas"],unit:"100g",cal:87,p:2,c:20,f:.1},
+  {keys:["batata","batatas"],unit:"100g",cal:90,p:1.6,c:21,f:.1},
+  {keys:["avena"],unit:"100g",cal:389,p:17,c:66,f:7},
+  {keys:["pan integral"],unit:"slice",cal:75,p:3,c:13,f:1},
+  {keys:["yogur griego"],unit:"100g",cal:97,p:9,c:4,f:5},
+  {keys:["porotos","frijoles"],unit:"100g",cal:127,p:8.7,c:23,f:.5},
+  {keys:["ensalada"],unit:"portion",cal:80,p:3,c:12,f:2},
+  {keys:["aceite de oliva"],unit:"tbsp",cal:119,p:0,c:0,f:13.5},
+  {keys:["queso"],unit:"30g",cal:110,p:7,c:1,f:9}
+];
+function extractQuantity(text,entry,key){
+  const before=text.slice(Math.max(0,text.indexOf(key)-35),text.indexOf(key)+key.length+10);
+  const gram=before.match(/(\d+(?:[.,]\d+)?)\s*(?:g|gr|gramos)/i);
+  const ml=before.match(/(\d+(?:[.,]\d+)?)\s*ml/i);
+  const units=before.match(/(\d+(?:[.,]\d+)?)\s*(?:x|unidades?|u\b)?/i);
+  if(entry.unit==="100g"&&gram)return parseFloat(gram[1].replace(",","."))/100;
+  if(entry.unit==="100ml"&&ml)return parseFloat(ml[1].replace(",","."))/100;
+  if(entry.unit==="30g"&&gram)return parseFloat(gram[1].replace(",","."))/30;
+  if(entry.unit==="unit"&&units)return Math.max(1,parseFloat(units[1].replace(",",".")));
+  if(entry.unit==="slice"&&units)return Math.max(1,parseFloat(units[1].replace(",",".")));
+  return 1
+}
+function estimateMealLocally(description){
+  const text=description.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  let total={calories:0,protein:0,carbs:0,fat:0},matched=[];
+  FOOD_DB.forEach(entry=>{
+    const key=entry.keys.find(k=>text.includes(k.normalize("NFD").replace(/[\u0300-\u036f]/g,"")));
+    if(!key)return;
+    const factor=extractQuantity(text,entry,key);
+    total.calories+=entry.cal*factor;total.protein+=entry.p*factor;total.carbs+=entry.c*factor;total.fat+=entry.f*factor;
+    matched.push(entry.keys[0])
+  });
+  if(!matched.length){
+    total={calories:450,protein:25,carbs:50,fat:16};
+    return{...total,confidence:"Baja",explanation:"No reconocí cantidades o alimentos concretos. Usé una comida promedio; corregí los valores antes de guardar."}
+  }
+  const vague=!/\d/.test(text);
+  return{
+    calories:Math.round(total.calories),
+    protein:+total.protein.toFixed(1),
+    carbs:+total.carbs.toFixed(1),
+    fat:+total.fat.toFixed(1),
+    confidence:vague?"Media":"Alta",
+    explanation:`Reconocí: ${matched.join(", ")}.${vague?" No indicaste todas las cantidades, por eso es una aproximación.":""}`
+  }
+}
+function renderNutrition(){
+  const target=nutritionTargets(),tot=nutritionTotals();
+  document.getElementById("nutritionDateLabel").textContent=nutritionDate.toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long"});
+  document.getElementById("nutritionGoalLabel").textContent=`Objetivo ${target.calories} kcal · ${target.protein} g proteína`;
+  const macros=[
+    ["calories","Calorías",Math.round(tot.calories),target.calories,"kcal","i-fire"],
+    ["protein","Proteínas",Math.round(tot.protein),target.protein,"g","i-dumbbell"],
+    ["carbs","Carbohidratos",Math.round(tot.carbs),target.carbs,"g","i-trend"],
+    ["fat","Grasas",Math.round(tot.fat),target.fat,"g","i-food"]
+  ];
+  document.getElementById("macroProgress").innerHTML=macros.map(m=>{
+    const pct=Math.min(100,Math.round(m[2]/Math.max(1,m[3])*100)),over=m[2]>m[3];
+    return`<div class="macro-card ${m[0]} ${over?"over":""}">
+      <div class="macro-top"><div class="macro-label"><svg><use href="#${m[5]}"/></svg>${m[1]}</div><div class="macro-value">${m[2]} / ${m[3]} ${m[4]}</div></div>
+      <div class="macro-bar"><div class="macro-fill" style="width:${pct}%"></div></div>
+    </div>`
+  }).join("");
+  const meals=mealsForDate();
+  document.getElementById("mealCountLabel").textContent=`${meals.length} registro${meals.length===1?"":"s"}`;
+  const groups={};
+  meals.forEach(m=>(groups[m.type]??=[]).push(m));
+  document.getElementById("dailyMeals").innerHTML=meals.length?Object.entries(groups).map(([type,list])=>`
+    <div class="meal-group"><div class="meal-group-title"><div class="row-title">${type}</div><span class="caption">${Math.round(list.reduce((a,m)=>a+(+m.calories||0),0))} kcal</span></div>
+    ${list.map(m=>`<div class="meal-item"><div class="meal-item-head"><div><div class="meal-name">${m.description}</div><div class="meal-time">${m.time||"Sin hora"} · ${m.confidence||"Estimado"}</div></div><button class="set-menu" onclick="deleteMeal('${m.id}')"><svg><use href="#i-x"/></svg></button></div>
+      <div class="meal-macros"><span class="macro-chip">${Math.round(m.calories)} kcal</span><span class="macro-chip">${m.protein} g P</span><span class="macro-chip">${m.carbs} g C</span><span class="macro-chip">${m.fat} g G</span></div></div>`).join("")}</div>`).join(""):'<div class="empty">Todavía no registraste comidas en este día.</div>'
+}
+function openNutritionSettings(){
+  const s=data.nutritionSettings,target=nutritionTargets();
+  document.getElementById("nutritionAge").value=s.age;document.getElementById("nutritionSex").value=s.sex;
+  document.getElementById("nutritionActivity").value=String(s.activity);document.getElementById("nutritionGoal").value=s.goal;
+  document.getElementById("proteinPerKg").value=s.proteinPerKg;document.getElementById("calorieAdjustment").value=s.adjustment;
+  renderNutritionGoalPreview();openModal("nutritionSettingsModal")
+}
+function readNutritionSettingsFromForm(){
+  return{age:+document.getElementById("nutritionAge").value||28,sex:document.getElementById("nutritionSex").value,activity:+document.getElementById("nutritionActivity").value||1.55,goal:document.getElementById("nutritionGoal").value,proteinPerKg:+document.getElementById("proteinPerKg").value||1.8,adjustment:+document.getElementById("calorieAdjustment").value||15}
+}
+function renderNutritionGoalPreview(){
+  const old=data.nutritionSettings;data.nutritionSettings=readNutritionSettingsFromForm();const t=nutritionTargets();data.nutritionSettings=old;
+  document.getElementById("nutritionGoalPreview").innerHTML=[["Calorías",`${t.calories} kcal`],["Proteínas",`${t.protein} g`],["Carbohidratos",`${t.carbs} g`],["Grasas",`${t.fat} g`]].map(x=>`<div class="goal-box"><span>${x[0]}</span><strong>${x[1]}</strong></div>`).join("")
+}
+window.deleteMeal=async id=>{data.meals=data.meals.filter(m=>m.id!==id);save();if(currentUser){await sb.from('nutrition_meals').delete().eq('id',id).eq('user_id',currentUser.id)}renderNutrition();toast('Comida eliminada')}
+
+function updateCloudStatus(mode,title,text){const box=document.getElementById("cloudStatus");if(!box)return;box.className=`cloud-status ${mode||""}`;document.getElementById("cloudStatusTitle").textContent=title;document.getElementById("cloudStatusText").textContent=text}
+function renderAuthState(){const signedIn=Boolean(currentUser);document.getElementById("signedOutPanel").hidden=signedIn;document.getElementById("signedInPanel").hidden=!signedIn;if(signedIn){document.getElementById("signedInEmail").textContent=currentUser.email||"Cuenta conectada";updateCloudStatus("online","Sincronización activa",lastCloudSync?`Última sincronización: ${new Date(lastCloudSync).toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"})}`:"Preparando primera sincronización...")}else updateCloudStatus("","Sin sesión","Tus datos están guardados localmente")}
+function queueCloudSync(){if(!currentUser||cloudSyncing)return;clearTimeout(cloudSyncTimer);cloudSyncTimer=setTimeout(()=>syncAllToCloud(false),900)}
+async function syncAllToCloud(showToast=true){if(!currentUser)return showToast&&toast("Iniciá sesión para sincronizar");cloudSyncing=true;updateCloudStatus("syncing","Sincronizando...","Guardando todos los módulos en Supabase");try{const payload={user_id:currentUser.id,state:data,profile,ui,device_updated_at:new Date().toISOString(),updated_at:new Date().toISOString()};const{error}=await sb.from("prime_app_state").upsert(payload,{onConflict:"user_id"});if(error)throw error;lastCloudSync=new Date().toISOString();localStorage.setItem("prime-last-cloud-sync",lastCloudSync);updateCloudStatus("online","Todo sincronizado",`Última sincronización: ${new Date(lastCloudSync).toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"})}`);if(showToast)toast("Datos guardados en Supabase")}catch(error){console.error(error);updateCloudStatus("error","Error de sincronización",error.message||"No se pudo guardar");if(showToast)toast(error.message||"Error de sincronización")}finally{cloudSyncing=false}}
+async function loadAllFromCloud(confirmReplace=false){if(!currentUser)return;try{const{data:row,error}=await sb.from("prime_app_state").select("state,profile,ui,updated_at").eq("user_id",currentUser.id).maybeSingle();if(error)throw error;if(!row){await syncAllToCloud(false);return}if(confirmReplace&&!confirm("Esto reemplazará los datos de este dispositivo por la copia de Supabase. ¿Continuar?"))return;data=normalizeData(row.state||clone(defaults));profile=row.profile||profile;ui=row.ui||ui;localStorage.setItem(KEY,JSON.stringify(data));localStorage.setItem(PROFILE_KEY,JSON.stringify(profile));localStorage.setItem(UI_KEY,JSON.stringify(ui));lastCloudSync=row.updated_at;renderAll();renderAuthState();toast("Datos descargados de Supabase")}catch(error){console.error(error);toast(error.message||"No se pudieron descargar los datos")}}
+async function initializeCloud(){lastCloudSync=localStorage.getItem("prime-last-cloud-sync");const{data:{session}}=await sb.auth.getSession();currentUser=session?.user||null;renderAuthState();sb.auth.onAuthStateChange(async(event,sessionNow)=>{currentUser=sessionNow?.user||null;renderAuthState();if(event==="SIGNED_IN"){await loadAllFromCloud(false);await checkAIConnection()}});if(currentUser)await loadAllFromCloud(false)}
+async function callSmartHandler(payload){const{data:{session}}=await sb.auth.getSession();const headers={"Content-Type":"application/json","apikey":SUPABASE_PUBLISHABLE_KEY};if(session?.access_token)headers.Authorization=`Bearer ${session.access_token}`;const response=await fetch(SMART_HANDLER_URL,{method:"POST",headers,body:JSON.stringify(payload)});let result;try{result=await response.json()}catch{throw new Error(`La función respondió ${response.status} sin JSON`)}if(!response.ok||result.ok===false)throw new Error(result.error||result.message||`Error ${response.status}`);return result}
+async function checkAIConnection(){const badge=document.getElementById("aiModeBadge");badge.className="ai-connection loading";badge.textContent="Conectando IA...";try{const result=await callSmartHandler({action:"status",live:true});badge.className="ai-connection online";badge.textContent="IA conectada";badge.title=result.message||"Globant AI conectada"}catch(error){console.error(error);badge.className="ai-connection error";badge.textContent="IA sin conexión";badge.title=error.message}}
+async function saveMealRecordToCloud(meal){if(!currentUser)return;const row={id:meal.id,user_id:currentUser.id,eaten_at:`${meal.date}T${meal.time||"12:00"}:00`,meal_date:meal.date,meal_type:meal.type,description:meal.description,normalized_name:meal.normalizedName||null,calories:meal.calories,protein_g:meal.protein,carbs_g:meal.carbs,fat_g:meal.fat,fiber_g:meal.fiber??null,confidence:meal.confidence||"medium",confidence_percent:meal.confidencePercent||null,estimated_total_weight_g:meal.estimatedTotalWeight??null,items:meal.items||[],assumptions:meal.assumptions||[],source:"ai_estimate",updated_at:new Date().toISOString()};const{error}=await sb.from("nutrition_meals").upsert(row,{onConflict:"id"});if(error)console.error("nutrition_meals:",error)}
+function renderAll(){renderProfile();applyUI();renderHome();renderRoutine();renderCalendar();renderProgress();renderNutrition();renderReports();if(getSession())renderWorkout()}
 window.updateSet=(ei,si,f,v)=>{const s=getSession();if(!s)return;s.exercises[ei].sets[si][f]=v===""?"":+v;save()}
 window.toggleSet=(ei,si)=>{const s=getSession(),e=s?.exercises[ei],x=e?.sets[si];if(!x)return;x.done=!x.done;if(x.done&&!x.reps)x.reps=e.minReps;save();if(x.done)startTimer(e.rest||90);renderWorkout();renderHome()}
 window.addSet=ei=>{const e=getSession().exercises[ei],last=e.sets.at(-1);e.sets.push({set:e.sets.filter(x=>!x.warmup).length+1,weight:last?.weight??e.suggestedWeight,reps:"",rir:"",done:false,warmup:false,failed:false});save();renderWorkout()}
@@ -802,31 +1151,17 @@ document.querySelectorAll("[data-progress-tab]").forEach(b=>b.onclick=()=>{curre
 document.getElementById("menuBtn").onclick=()=>{document.getElementById("drawer").classList.add("open");document.getElementById("drawerBackdrop").classList.add("open")};
 document.getElementById("drawerClose").onclick=document.getElementById("drawerBackdrop").onclick=()=>{document.getElementById("drawer").classList.remove("open");document.getElementById("drawerBackdrop").classList.remove("open")};
 document.getElementById("avatarBtn").onclick=document.getElementById("drawerProfile").onclick=()=>{pendingPhoto=profile.photo||"";renderProfile();openModal("profileModal")};
-if(document.getElementById("startWorkoutBtn"))document.getElementById("startWorkoutBtn").onclick=()=>{const s=createTodaySession();if(!s)return toast("Hoy no hay rutina configurada");renderWorkout();showPage("workoutPage")};
+document.getElementById("cloudAccountBtn").onclick=()=>openModal("cloudAccountModal");
+document.getElementById("drawerProgressBtn").onclick=()=>{document.getElementById("drawer").classList.remove("open");document.getElementById("drawerBackdrop").classList.remove("open");showPage("progressPage")};
 function markTodaySkipped(){let s=getSession()||createTodaySession();if(!s)return;s.status="skipped";s.completedAt=new Date().toISOString();save();renderAll();toast("Marcado como no fui")}
-if(document.getElementById("skipTodayBtn"))document.getElementById("skipTodayBtn").onclick=markTodaySkipped;
 document.getElementById("leaveWorkoutBtn").onclick=()=>showPage("homePage");
-document.getElementById("finishWorkoutBtn").onclick=()=>{
-  const s=getSession();if(!s)return;
-  const strengthTotal=s.exercises.reduce((a,e)=>a+e.sets.filter(x=>!x.warmup&&!e.skipped).length,0);
-  const strengthDone=s.exercises.reduce((a,e)=>a+e.sets.filter(x=>x.done&&!x.warmup).length,0);
-  const cardioTotal=(s.cardio||[]).length;
-  const cardioDone=(s.cardio||[]).filter(c=>c.done).length;
-  const total=strengthTotal+cardioTotal,done=strengthDone+cardioDone;
-  if(done<total&&!confirm(`Completaste ${done} de ${total} bloques. ¿Finalizar como entrenamiento parcial?`))return;
-  s.exercises.forEach(e=>{const r=recommendation(e);e.recommendation=r.label;e.nextWeight=r.next;e.recommendationWhy=r.why});
-  s.status=done===total?"completed":"partial";
-  s.completedAt=new Date().toISOString();
-  save();renderAll();showPage("homePage");
-  toast(s.status==="completed"?"Entrenamiento completado":"Guardado como parcial")
-};
+document.getElementById("finishWorkoutBtn").onclick=()=>{const s=getSession();if(!s)return;const strengthTotal=s.exercises.reduce((a,e)=>a+e.sets.filter(x=>!x.warmup&&!e.skipped).length,0),strengthDone=s.exercises.reduce((a,e)=>a+e.sets.filter(x=>x.done&&!x.warmup).length,0),cardioTotal=(s.cardio||[]).length,cardioDone=(s.cardio||[]).filter(c=>c.done).length,total=strengthTotal+cardioTotal,done=strengthDone+cardioDone;if(done<total&&!confirm(`Completaste ${done} de ${total} bloques. ¿Finalizar como entrenamiento parcial?`))return;s.exercises.forEach(e=>{const r=recommendation(e);e.recommendation=r.label;e.nextWeight=r.next;e.recommendationWhy=r.why});s.status=done===total?"completed":"partial";s.completedAt=new Date().toISOString();save();renderAll();showPage("homePage");toast(s.status==="completed"?"Entrenamiento completado":"Guardado como parcial")};
 document.getElementById("registerBodyQuick").onclick=document.getElementById("registerBodyBtn").onclick=openBody;
-document.getElementById("saveBodyBtn").onclick=()=>{const val=id=>{const x=document.getElementById(id).value;return x===""?null:+x};const entry={date:iso(),weight:val("bodyWeight"),height:val("bodyHeight"),bodyFat:val("bodyFat"),waist:val("bodyWaist"),chest:val("bodyChest"),arm:val("bodyArm"),leg:val("bodyLeg"),neck:val("bodyNeck"),notes:document.getElementById("bodyNotes").value.trim()};if(Object.entries(entry).filter(([k])=>!["date","notes"].includes(k)).every(([,v])=>v===null))return toast("Cargá al menos una medida");data.bodyMeasurements.push(entry);save();closeModal("bodyModal");renderAll();toast("Medición guardada")};
+document.getElementById("saveBodyBtn").onclick=()=>{const val=id=>{const x=document.getElementById(id).value;return x===""?null:+x};const entry={id:crypto.randomUUID?.()||String(Date.now()),date:iso(),weight:val("bodyWeight"),height:val("bodyHeight"),bodyFat:val("bodyFat"),waist:val("bodyWaist"),chest:val("bodyChest"),arm:val("bodyArm"),leg:val("bodyLeg"),neck:val("bodyNeck"),notes:document.getElementById("bodyNotes").value.trim()};if(Object.entries(entry).filter(([k])=>!["id","date","notes"].includes(k)).every(([,v])=>v===null))return toast("Cargá al menos una medida");data.bodyMeasurements.push(entry);save();closeModal("bodyModal");renderAll();toast("Medición guardada")};
 document.getElementById("profilePhotoInput").onchange=e=>{const f=e.target.files?.[0];if(!f)return;if(f.size>2.5*1024*1024)return toast("Elegí una imagen menor a 2,5 MB");const r=new FileReader();r.onload=()=>{pendingPhoto=String(r.result);document.getElementById("profilePreview").src=pendingPhoto;document.getElementById("profilePreview").hidden=false;document.getElementById("profileInitials").hidden=true};r.readAsDataURL(f)};
 document.getElementById("removePhotoBtn").onclick=()=>{pendingPhoto="";document.getElementById("profilePreview").hidden=true;document.getElementById("profileInitials").hidden=false};
 document.getElementById("saveProfileBtn").onclick=()=>{profile={name:document.getElementById("profileName").value.trim()||"Nicolás",goal:document.getElementById("profileGoal").value.trim()||"Proyecto Prime",photo:pendingPhoto};saveProfile();closeModal("profileModal");renderProfile();toast("Perfil actualizado")};
-document.getElementById("themeToggle").onclick=()=>{ui.light=!ui.light;saveUI();applyUI()};
-document.getElementById("compactToggle").onclick=()=>{ui.compact=!ui.compact;saveUI();applyUI()};
+document.getElementById("themeToggle").onclick=()=>{ui.light=!ui.light;saveUI();applyUI()};document.getElementById("compactToggle").onclick=()=>{ui.compact=!ui.compact;saveUI();applyUI()};
 document.getElementById("monthPrev").onclick=document.getElementById("calendarPrev").onclick=()=>{currentMonth=new Date(currentMonth.getFullYear(),currentMonth.getMonth()-1,1);renderCalendar()};
 document.getElementById("monthNext").onclick=document.getElementById("calendarNext").onclick=()=>{currentMonth=new Date(currentMonth.getFullYear(),currentMonth.getMonth()+1,1);renderCalendar()};
 document.getElementById("addExerciseBtn").onclick=()=>{data.routine[editingRoutine].exercises.push({id:"ex-"+Date.now(),name:"Nuevo ejercicio",sets:3,minReps:8,maxReps:12,weight:0,rest:90,rir:2,active:true});renderRoutineEditor()};
@@ -834,10 +1169,449 @@ document.getElementById("addCardioBtn").onclick=()=>{const r=data.routine[editin
 document.getElementById("saveRoutineBtn").onclick=()=>{const r=data.routine[editingRoutine];r.name=document.getElementById("routineName").value.trim()||r.name;r.muscle=document.getElementById("routineMuscle").value.trim()||r.muscle;r.cardio=r.cardio||[];save();closeModal("routineModal");renderAll();toast("Rutina actualizada")};
 document.getElementById("newRoutineDay").onclick=()=>toast("Editá cualquiera de los cinco días configurados");
 document.getElementById("timerMinus").onclick=()=>{timerSeconds=Math.max(0,timerSeconds-15);tickTimer()};document.getElementById("timerPlus").onclick=()=>{timerSeconds+=15;tickTimer()};document.getElementById("timerClose").onclick=()=>{clearInterval(timerId);document.getElementById("timer").classList.remove("show")};
+document.getElementById("nutritionSettingsBtn").onclick=openNutritionSettings;document.getElementById("nutritionPrev").onclick=()=>{nutritionDate.setDate(nutritionDate.getDate()-1);renderNutrition()};document.getElementById("nutritionNext").onclick=()=>{nutritionDate.setDate(nutritionDate.getDate()+1);renderNutrition()};
+document.querySelectorAll("[data-meal-example]").forEach(b=>b.onclick=()=>{document.getElementById("mealDescription").value=b.dataset.mealExample});
+document.getElementById("analyzeMealBtn").onclick=async()=>{const description=document.getElementById("mealDescription").value.trim(),mealType=document.getElementById("mealType").value,button=document.getElementById("analyzeMealBtn");if(description.length<3)return toast("Describí primero lo que comiste");const body=latestBody()||{},original=button.innerHTML;button.disabled=true;button.innerHTML='<svg><use href="#i-spark"/></svg>Analizando con IA...';try{const result=await callSmartHandler({action:"analyze_meal",description,mealType,userContext:{country:"Argentina",weightKg:Number(body.weight)||70.4,heightCm:Number(body.height)||184,goal:profile.goal||"Proyecto Prime"}}),a=result.analysis;pendingMealEstimate={calories:a.calories,protein:a.protein_g,carbs:a.carbs_g,fat:a.fat_g,fiber:a.fiber_g,confidence:a.confidence,confidencePercent:a.confidence_percent,explanation:[...(a.assumptions||[]),a.clarification_suggestion||""].filter(Boolean).join(" "),items:a.items||[],normalizedName:a.normalized_name,estimatedTotalWeight:a.estimated_total_weight_g,assumptions:a.assumptions||[]};document.getElementById("estimatedCalories").value=a.calories;document.getElementById("estimatedProtein").value=a.protein_g;document.getElementById("estimatedCarbs").value=a.carbs_g;document.getElementById("estimatedFat").value=a.fat_g;document.getElementById("aiExplanation").textContent=pendingMealEstimate.explanation||"Estimación generada por IA";document.getElementById("aiConfidence").textContent=`Confianza ${a.confidence_percent}%`;document.getElementById("aiMealResult").classList.add("show");toast("Comida analizada")}catch(error){console.error(error);toast(error.message||"No se pudo analizar") }finally{button.disabled=false;button.innerHTML=original}};
+document.getElementById("saveMealBtn").onclick=async()=>{const description=document.getElementById("mealDescription").value.trim();if(!description)return toast("Falta la descripción");const meal={id:crypto.randomUUID?.()||String(Date.now()),date:iso(nutritionDate),type:document.getElementById("mealType").value,time:document.getElementById("mealTime").value,description,normalizedName:pendingMealEstimate?.normalizedName||description,calories:+document.getElementById("estimatedCalories").value||0,protein:+document.getElementById("estimatedProtein").value||0,carbs:+document.getElementById("estimatedCarbs").value||0,fat:+document.getElementById("estimatedFat").value||0,fiber:pendingMealEstimate?.fiber??null,confidence:pendingMealEstimate?.confidence||"Editado",confidencePercent:pendingMealEstimate?.confidencePercent||null,estimatedTotalWeight:pendingMealEstimate?.estimatedTotalWeight??null,items:pendingMealEstimate?.items||[],assumptions:pendingMealEstimate?.assumptions||[]};data.meals.push(meal);save();await saveMealRecordToCloud(meal);document.getElementById("mealDescription").value="";document.getElementById("aiMealResult").classList.remove("show");pendingMealEstimate=null;renderNutrition();toast("Comida registrada")};
+["nutritionAge","nutritionSex","nutritionActivity","nutritionGoal","proteinPerKg","calorieAdjustment"].forEach(id=>document.getElementById(id).addEventListener("input",renderNutritionGoalPreview));document.getElementById("saveNutritionSettingsBtn").onclick=()=>{data.nutritionSettings=readNutritionSettingsFromForm();save();closeModal("nutritionSettingsModal");renderNutrition();toast("Objetivos actualizados")};
+document.getElementById("loginBtn").onclick=async()=>{const email=document.getElementById("authEmail").value.trim(),password=document.getElementById("authPassword").value;if(!email||password.length<6)return toast("Ingresá email y contraseña de al menos 6 caracteres");const{error}=await sb.auth.signInWithPassword({email,password});if(error)return toast(error.message);closeModal("cloudAccountModal");toast("Sesión iniciada")};
+document.getElementById("registerBtn").onclick=async()=>{const email=document.getElementById("authEmail").value.trim(),password=document.getElementById("authPassword").value;if(!email||password.length<6)return toast("Ingresá email y contraseña de al menos 6 caracteres");const{error}=await sb.auth.signUp({email,password});if(error)return toast(error.message);toast("Cuenta creada. Revisá tu email si Supabase solicita confirmación")};
+document.getElementById("logoutBtn").onclick=async()=>{await sb.auth.signOut();currentUser=null;renderAuthState();closeModal("cloudAccountModal");toast("Sesión cerrada")};document.getElementById("syncNowBtn").onclick=()=>syncAllToCloud(true);document.getElementById("loadCloudBtn").onclick=()=>loadAllFromCloud(true);
 document.getElementById("exportBtn").onclick=()=>{const payload={data,profile,ui,exportedAt:new Date().toISOString()},blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`prime-training-${iso()}.json`;a.click();URL.revokeObjectURL(url)};
 document.getElementById("importInput").onchange=async e=>{try{const p=JSON.parse(await e.target.files[0].text());data=normalizeData(p.data||p);if(p.profile)profile=p.profile;if(p.ui)ui=p.ui;save();saveProfile();saveUI();renderAll();toast("Copia importada")}catch{toast("Archivo inválido")}};
 document.getElementById("resetBtn").onclick=()=>{if(!confirm("¿Seguro que querés borrar todos los datos?"))return;data=clone(defaults);save();renderAll();toast("Aplicación restablecida")};
-renderAll();showPage("homePage");
+renderAll();showPage("homePage");initializeCloud();checkAIConnection();
 </script>
+
+<script id="primeNutritionProScript">
+(() => {
+  "use strict";
+
+  const MEAL_SLOTS = [
+    {type:"Desayuno",label:"Desayuno",required:true},
+    {type:"Colación mañana",label:"Colación de media mañana",required:false},
+    {type:"Almuerzo",label:"Almuerzo",required:true},
+    {type:"Colación tarde",label:"Colación de la tarde",required:false},
+    {type:"Merienda",label:"Merienda",required:true},
+    {type:"Colación noche",label:"Colación nocturna",required:false},
+    {type:"Cena",label:"Cena",required:true}
+  ];
+  const REQUIRED_MEALS = ["Desayuno","Almuerzo","Merienda","Cena"];
+  let currentMealSlot = "Desayuno";
+  let editingSavedMealId = null;
+
+  function ensureProData() {
+    data.savedMeals = data.savedMeals || [];
+    data.aiInsights = data.aiInsights || {};
+    data.nutritionSettings = data.nutritionSettings || {age:28,sex:"male",activity:1.55,goal:"maintain",proteinPerKg:1.8,adjustment:15};
+    data.routine = data.routine || [];
+    const required = [
+      {day:0,name:"Domingo",muscle:"Descanso",mode:"rest"},
+      {day:1,name:"Lunes",muscle:"Pecho, hombros y tríceps",mode:"training"},
+      {day:2,name:"Martes",muscle:"Espalda y bíceps",mode:"training"},
+      {day:3,name:"Miércoles",muscle:"Piernas",mode:"training"},
+      {day:4,name:"Jueves",muscle:"Pecho y espalda",mode:"training"},
+      {day:5,name:"Viernes",muscle:"Hombros, brazos y piernas",mode:"training"},
+      {day:6,name:"Sábado",muscle:"Descanso",mode:"rest"}
+    ];
+    required.forEach(base => {
+      if (!data.routine.some(day => day.day === base.day)) {
+        data.routine.push({...base, exercises:[], cardio:[]});
+      }
+    });
+    data.routine.forEach(day => {
+      day.exercises = day.exercises || [];
+      day.cardio = day.cardio || [];
+      day.mode = day.mode || ((day.exercises.length || day.cardio.length) ? "training" : "rest");
+    });
+    data.routine.sort((a,b)=>((a.day+6)%7)-((b.day+6)%7));
+  }
+
+  function addSymbols() {
+    const defs = document.querySelector("svg[style*='display:none']");
+    if (!defs || document.getElementById("i-book")) return;
+    defs.insertAdjacentHTML("beforeend", `
+      <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 4h6a3 3 0 0 1 3 3v13a3 3 0 0 0-3-3H4z"/><path d="M20 4h-6a3 3 0 0 0-3 3v13a3 3 0 0 1 3-3h6z"/></symbol>
+      <symbol id="i-rest" viewBox="0 0 24 24"><path d="M20 15.5A8 8 0 0 1 8.5 4 8 8 0 1 0 20 15.5z"/><path d="M17 4h4M19 2v4"/></symbol>
+    `);
+  }
+
+  function buildNutritionUI() {
+    const page = document.getElementById("nutritionPage");
+    if (!page) return;
+    page.innerHTML = `
+      <div class="page-head">
+        <div><div class="page-title">ALIMENTACIÓN</div><div class="caption">Macros, cronología y biblioteca personal</div></div>
+        <button class="icon-button" id="nutritionSettingsBtn"><svg><use href="#i-settings"/></svg></button>
+      </div>
+      <article class="card nutrition-dashboard">
+        <div class="nutrition-header-row">
+          <button class="icon-button" id="nutritionPrev"><svg><use href="#i-left"/></svg></button>
+          <div style="text-align:center"><div class="nutrition-day-title" id="nutritionDateLabel"></div><div class="nutrition-mode" id="nutritionGoalLabel"></div></div>
+          <button class="icon-button" id="nutritionNext"><svg><use href="#i-right"/></svg></button>
+        </div>
+        <div class="nutrition-completion">
+          <div class="mini-ring" id="mealCompletionRing"><span id="mealCompletionValue">0/4</span></div>
+          <div><div class="row-title" id="mealCompletionTitle">Completá tus cuatro comidas principales</div><div class="row-sub">Desayuno, almuerzo, merienda y cena. Las colaciones son opcionales.</div></div>
+        </div>
+        <div class="macro-grid" id="macroProgress" style="margin-top:12px"></div>
+      </article>
+      <article class="nutrition-ai-review">
+        <div class="heading-row" style="margin-bottom:5px"><h2 class="heading"><svg style="color:var(--cyan)"><use href="#i-brain"/></svg>ANÁLISIS DEL DÍA</h2><button class="slot-action" id="reviewNutritionDayBtn">Analizar con IA</button></div>
+        <div class="row-sub" id="nutritionAIReviewText">Registrá comidas y la IA analizará cómo venís respecto de tus objetivos.</div>
+      </article>
+      <article class="card section">
+        <div class="heading-row"><h2 class="heading"><svg style="color:var(--orange)"><use href="#i-food"/></svg>CRONOLOGÍA DEL DÍA</h2><button class="slot-action" id="openMealLibraryBtn"><svg style="width:14px;height:14px"><use href="#i-book"/></svg> Biblioteca</button></div>
+        <div class="meal-timeline" id="mealTimeline"></div>
+      </article>
+    `;
+  }
+
+  function addModals() {
+    if (document.getElementById("mealComposerProModal")) return;
+    document.body.insertAdjacentHTML("beforeend", `
+      <div class="modal" id="mealComposerProModal"><div class="sheet">
+        <div class="sheet-head"><div><div class="sheet-title" id="mealComposerTitle">Agregar comida</div><div class="caption">Describí libremente la comida y la IA la descompone</div></div><button class="icon-button" data-pro-close="mealComposerProModal"><svg><use href="#i-x"/></svg></button></div>
+        <div class="heading-row"><h2 class="heading"><svg style="color:#c58cff"><use href="#i-brain"/></svg>ANÁLISIS PRECISO</h2><span class="ai-connection loading" id="aiModeBadgePro">Comprobando IA...</span></div>
+        <textarea class="field meal-textarea" id="mealDescriptionPro" placeholder="Ejemplo: una pechuga entera a la plancha con dos cucharadas soperas de arroz cocido..."></textarea>
+        <div class="form-grid" style="margin-top:9px"><div class="form-group"><label>Comida</label><select class="field" id="mealTypePro"></select></div><div class="form-group"><label>Hora</label><input class="field" id="mealTimePro" type="time"></div></div>
+        <button class="btn btn-primary" id="analyzeMealProBtn" style="width:100%;margin-top:10px"><svg><use href="#i-spark"/></svg>Analizar con IA</button>
+        <div class="ai-result" id="aiMealProResult">
+          <div class="heading-row"><div><div class="row-title" id="aiNormalizedNamePro"></div><div class="row-sub" id="aiExplanationPro"></div></div><span class="confidence" id="aiConfidencePro"></span></div>
+          <div class="ai-result-grid"><div class="ai-estimate"><span>Calorías</span><input class="field" id="estimatedCaloriesPro" type="number"></div><div class="ai-estimate"><span>Proteínas (g)</span><input class="field" id="estimatedProteinPro" type="number" step=".1"></div><div class="ai-estimate"><span>Carbohidratos (g)</span><input class="field" id="estimatedCarbsPro" type="number" step=".1"></div><div class="ai-estimate"><span>Grasas (g)</span><input class="field" id="estimatedFatPro" type="number" step=".1"></div></div>
+          <div class="ai-precision-panel"><div class="row-title">Desglose detectado</div><div class="ai-items-list" id="aiDetectedItemsPro"></div><div class="row-sub" id="aiRangeTextPro" style="margin-top:8px"></div></div>
+          <div class="clarification-box" id="clarificationBoxPro"><div class="row-title">Podemos mejorar la precisión</div><div class="row-sub" id="clarificationQuestionPro"></div><input class="field" id="mealClarificationPro" placeholder="Ejemplo: fue sin aceite y la pechuga pesaba 220 g" style="margin-top:8px;text-align:left"><button class="btn btn-soft" id="refineMealProBtn" style="width:100%;margin-top:8px">Recalcular</button></div>
+          <label class="tool" style="display:flex;align-items:center;gap:7px;margin-top:10px"><input type="checkbox" id="saveToLibraryProCheck"> Guardar también en mi biblioteca</label>
+          <button class="btn btn-primary" id="saveMealProBtn" style="width:100%;margin-top:10px"><svg><use href="#i-check"/></svg>Guardar comida</button>
+        </div>
+      </div></div>
+
+      <div class="modal" id="mealLibraryProModal"><div class="sheet">
+        <div class="sheet-head"><div><div class="sheet-title">Biblioteca de comidas</div><div class="caption">Platos listos para usar</div></div><button class="icon-button" data-pro-close="mealLibraryProModal"><svg><use href="#i-x"/></svg></button></div>
+        <div class="library-toolbar"><input class="field library-search" id="mealLibraryProSearch" placeholder="Buscar plato..."><button class="icon-button" id="newSavedMealProBtn"><svg><use href="#i-plus"/></svg></button></div>
+        <div class="library-grid" id="mealLibraryProGrid"></div>
+      </div></div>
+
+      <div class="modal" id="savedMealProEditorModal"><div class="sheet">
+        <div class="sheet-head"><div class="sheet-title">Plato predefinido</div><button class="icon-button" data-pro-close="savedMealProEditorModal"><svg><use href="#i-x"/></svg></button></div>
+        <div class="form-grid"><div class="form-group" style="grid-column:1/-1"><label>Nombre</label><input class="field" id="savedMealProName"></div><div class="form-group"><label>Calorías</label><input class="field" id="savedMealProCalories" type="number"></div><div class="form-group"><label>Proteínas</label><input class="field" id="savedMealProProtein" type="number" step=".1"></div><div class="form-group"><label>Carbohidratos</label><input class="field" id="savedMealProCarbs" type="number" step=".1"></div><div class="form-group"><label>Grasas</label><input class="field" id="savedMealProFat" type="number" step=".1"></div><div class="form-group"><label>Comida habitual</label><select class="field" id="savedMealProType"></select></div></div>
+        <button class="btn btn-primary" id="saveSavedMealProBtn" style="width:100%;margin-top:10px">Guardar plato</button>
+      </div></div>
+    `);
+  }
+
+  function enhanceNutritionSettingsModal() {
+    const modal = document.getElementById("nutritionSettingsModal");
+    if (!modal || modal.dataset.proEnhanced) return;
+    modal.dataset.proEnhanced = "1";
+    const sheet = modal.querySelector(".sheet");
+    if (!sheet) return;
+    const firstGrid = sheet.querySelector(".form-grid");
+    if (firstGrid) {
+      firstGrid.insertAdjacentHTML("beforebegin", `
+        <div class="row-title" style="margin-bottom:8px">¿Qué estás haciendo ahora?</div>
+        <div class="objective-selector">
+          <button class="objective-option" data-pro-goal="cut">Déficit calórico<br><small>Perder grasa</small></button>
+          <button class="objective-option" data-pro-goal="maintain">Mantenimiento<br><small>Mantener peso</small></button>
+          <button class="objective-option" data-pro-goal="gain">Superávit calórico<br><small>Ganar músculo</small></button>
+        </div>
+      `);
+    }
+  }
+
+  function populateType(select, current) {
+    select.innerHTML = MEAL_SLOTS.map(slot => `<option ${slot.type===current?"selected":""}>${slot.type}</option>`).join("");
+  }
+
+  const originalNutritionTargets = nutritionTargets;
+  nutritionTargets = function() {
+    const body = latestBody() || {};
+    const settings = data.nutritionSettings || {};
+    const weight = Number(body.weight) || 70.4;
+    const height = Number(body.height) || 184;
+    const age = Number(settings.age) || 28;
+    const bmr = 10*weight + 6.25*height - 5*age + (settings.sex==="female" ? -161 : 5);
+    let calories = bmr * (Number(settings.activity) || 1.55);
+    const adjustment = (Number(settings.adjustment) || 15)/100;
+    if (settings.goal==="cut") calories *= 1-adjustment;
+    if (settings.goal==="gain") calories *= 1+adjustment;
+    calories = Math.round(calories);
+    const protein = Math.round(weight*(Number(settings.proteinPerKg)||1.8));
+    const fat = Math.round(weight*(settings.goal==="cut"?.75:.85));
+    const carbs = Math.max(0,Math.round((calories-protein*4-fat*9)/4));
+    return {calories,protein,carbs,fat,weight,height,bmr:Math.round(bmr)};
+  };
+
+  function goalName(goal) {
+    return goal==="cut" ? "Déficit calórico" : goal==="gain" ? "Superávit calórico" : "Mantenimiento";
+  }
+
+  function completedMainMeals() {
+    const types = new Set(mealsForDate().map(m=>m.type));
+    return REQUIRED_MEALS.filter(type=>types.has(type)).length;
+  }
+
+  const originalRenderNutrition = renderNutrition;
+  renderNutrition = function() {
+    const target = nutritionTargets();
+    const totals = nutritionTotals();
+    const completed = completedMainMeals();
+    document.getElementById("nutritionDateLabel").textContent = nutritionDate.toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long"});
+    document.getElementById("nutritionGoalLabel").textContent = `${goalName(data.nutritionSettings.goal)} · ${target.calories} kcal`;
+    document.getElementById("mealCompletionValue").textContent = `${completed}/4`;
+    document.getElementById("mealCompletionRing").style.setProperty("--complete",completed/4*100);
+    document.getElementById("mealCompletionTitle").textContent = completed===4 ? "Día de alimentación completo" : "Completá tus cuatro comidas principales";
+
+    const macros = [
+      ["calories","Calorías",Math.round(totals.calories),target.calories,"kcal","i-fire"],
+      ["protein","Proteínas",Math.round(totals.protein),target.protein,"g","i-dumbbell"],
+      ["carbs","Carbohidratos",Math.round(totals.carbs),target.carbs,"g","i-trend"],
+      ["fat","Grasas",Math.round(totals.fat),target.fat,"g","i-food"]
+    ];
+    document.getElementById("macroProgress").innerHTML = macros.map(m=>{
+      const pct=Math.min(100,Math.round(m[2]/Math.max(1,m[3])*100));
+      return `<div class="macro-card ${m[0]} ${m[2]>m[3]?"over":""}"><div class="macro-top"><div class="macro-label"><svg><use href="#${m[5]}"/></svg>${m[1]}</div><div class="macro-value">${m[2]} / ${m[3]} ${m[4]}</div></div><div class="macro-bar"><div class="macro-fill" style="width:${pct}%"></div></div></div>`;
+    }).join("");
+
+    const meals = mealsForDate();
+    document.getElementById("mealTimeline").innerHTML = MEAL_SLOTS.map(slot=>{
+      const list=meals.filter(m=>m.type===slot.type);
+      return `<div class="timeline-slot ${list.length?"complete":""} ${slot.required?"":"optional"}"><div class="slot-card"><div class="slot-head"><div><div class="slot-title"><svg style="color:${slot.required?"var(--orange)":"#a174ff"}"><use href="#${slot.required?"i-food":"i-plus"}"/></svg>${slot.label}</div><div class="slot-status">${slot.required?(list.length?"Comida principal registrada":"Obligatoria para cerrar el día"):"Opcional"}</div></div><div class="slot-actions"><button class="slot-action" data-add-slot="${slot.type}">+ Agregar</button><button class="slot-action" data-lib-slot="${slot.type}">Biblioteca</button></div></div><div class="slot-meals">${list.map(m=>`<div class="timeline-meal"><div class="timeline-meal-main"><div class="timeline-meal-title">${m.normalizedName||m.description}</div><div class="timeline-meal-sub">${m.time||"Sin hora"} · ${m.description}</div><div class="timeline-meal-macros"><span class="macro-chip">${Math.round(m.calories)} kcal</span><span class="macro-chip">${m.protein} g P</span><span class="macro-chip">${m.carbs} g C</span><span class="macro-chip">${m.fat} g G</span></div></div><button class="set-menu" data-delete-pro-meal="${m.id}"><svg><use href="#i-x"/></svg></button></div>`).join("")}</div></div></div>`;
+    }).join("");
+
+    document.querySelectorAll("[data-add-slot]").forEach(btn=>btn.onclick=()=>openComposer(btn.dataset.addSlot));
+    document.querySelectorAll("[data-lib-slot]").forEach(btn=>btn.onclick=()=>openLibrary(btn.dataset.libSlot));
+    document.querySelectorAll("[data-delete-pro-meal]").forEach(btn=>btn.onclick=()=>deleteProMeal(btn.dataset.deleteProMeal));
+    const review = data.aiInsights?.nutrition?.[iso(nutritionDate)];
+    document.getElementById("nutritionAIReviewText").textContent = review?.summary || "Registrá comidas y la IA analizará cómo venís respecto de tus objetivos.";
+  };
+
+  function openComposer(slot) {
+    currentMealSlot = slot;
+    pendingMealEstimate = null;
+    document.getElementById("mealComposerTitle").textContent = `Agregar ${slot.toLowerCase()}`;
+    populateType(document.getElementById("mealTypePro"),slot);
+    document.getElementById("mealTimePro").value = new Date().toTimeString().slice(0,5);
+    document.getElementById("mealDescriptionPro").value = "";
+    document.getElementById("aiMealProResult").classList.remove("show");
+    document.getElementById("clarificationBoxPro").classList.remove("show");
+    document.getElementById("saveToLibraryProCheck").checked = false;
+    openModal("mealComposerProModal");
+    checkAIConnectionPro();
+  }
+
+  async function saveLibraryItemCloud(item) {
+    if (!currentUser) return;
+    const row = {
+      id: item.id,
+      user_id: currentUser.id,
+      name: item.name,
+      default_meal_type: item.defaultType || null,
+      calories: item.calories || 0,
+      protein_g: item.protein || 0,
+      carbs_g: item.carbs || 0,
+      fat_g: item.fat || 0,
+      fiber_g: item.fiber ?? null,
+      items: item.items || [],
+      source: item.source || "manual",
+      updated_at: new Date().toISOString()
+    };
+    const { error } = await sb.from("nutrition_saved_meals").upsert(row,{onConflict:"id"});
+    if (error) console.error("nutrition_saved_meals:",error);
+  }
+
+  function openLibrary(slot) {
+    currentMealSlot = slot || "Desayuno";
+    renderLibrary();
+    openModal("mealLibraryProModal");
+  }
+
+  function renderLibrary() {
+    const q=(document.getElementById("mealLibraryProSearch")?.value||"").toLowerCase();
+    const list=data.savedMeals.filter(m=>(m.name||"").toLowerCase().includes(q));
+    document.getElementById("mealLibraryProGrid").innerHTML=list.length?list.map(m=>`
+      <div class="library-card"><h4>${m.name}</h4><p>${Math.round(m.calories)} kcal · ${m.protein} g P · ${m.carbs} g C · ${m.fat} g G</p><p>Habitual: ${m.defaultType||"Sin definir"}</p><div class="library-card-actions"><button class="btn btn-primary" style="min-height:38px;padding:8px" data-use-saved="${m.id}">Agregar</button><button class="set-menu" data-edit-saved="${m.id}"><svg><use href="#i-edit"/></svg></button></div></div>
+    `).join(""):'<div class="empty" style="grid-column:1/-1">Todavía no guardaste platos.</div>';
+    document.querySelectorAll("[data-use-saved]").forEach(btn=>btn.onclick=()=>useSavedMeal(btn.dataset.useSaved));
+    document.querySelectorAll("[data-edit-saved]").forEach(btn=>btn.onclick=()=>editSavedMeal(btn.dataset.editSaved));
+  }
+
+  async function useSavedMeal(id) {
+    const item=data.savedMeals.find(m=>m.id===id);if(!item)return;
+    const meal={id:crypto.randomUUID?.()||String(Date.now()),date:iso(nutritionDate),type:currentMealSlot||item.defaultType||"Almuerzo",time:new Date().toTimeString().slice(0,5),description:item.name,normalizedName:item.name,calories:item.calories,protein:item.protein,carbs:item.carbs,fat:item.fat,fiber:item.fiber??null,confidence:"high",confidencePercent:100,source:"saved_meal",items:item.items||[],assumptions:[]};
+    data.meals.push(meal);save();await saveMealRecordToCloud(meal);closeModal("mealLibraryProModal");renderNutrition();toast("Plato agregado");
+  }
+
+  function editSavedMeal(id) {
+    const item=data.savedMeals.find(m=>m.id===id);if(!item)return;
+    editingSavedMealId=id;
+    document.getElementById("savedMealProName").value=item.name;
+    document.getElementById("savedMealProCalories").value=item.calories;
+    document.getElementById("savedMealProProtein").value=item.protein;
+    document.getElementById("savedMealProCarbs").value=item.carbs;
+    document.getElementById("savedMealProFat").value=item.fat;
+    populateType(document.getElementById("savedMealProType"),item.defaultType||"Desayuno");
+    openModal("savedMealProEditorModal");
+  }
+
+  async function deleteProMeal(id) {
+    data.meals=data.meals.filter(m=>m.id!==id);save();
+    if(currentUser) await sb.from("nutrition_meals").delete().eq("id",id).eq("user_id",currentUser.id);
+    renderNutrition();toast("Comida eliminada");
+  }
+
+  async function checkAIConnectionPro() {
+    const badge=document.getElementById("aiModeBadgePro");
+    badge.className="ai-connection loading";badge.textContent="Conectando IA...";
+    try{const result=await callSmartHandler({action:"status",live:true});badge.className="ai-connection online";badge.textContent="IA conectada";badge.title=result.message||""}
+    catch(error){badge.className="ai-connection error";badge.textContent="IA sin conexión";badge.title=error.message}
+  }
+
+  async function analyzeMealPro(clarification="") {
+    const description=document.getElementById("mealDescriptionPro").value.trim();
+    if(description.length<3)return toast("Describí primero lo que comiste");
+    const button=document.getElementById(clarification?"refineMealProBtn":"analyzeMealProBtn");
+    const original=button.textContent;button.disabled=true;button.textContent="Analizando...";
+    try{
+      const body=latestBody()||{};
+      const result=await callSmartHandler({action:"analyze_meal",description,mealType:document.getElementById("mealTypePro").value,clarification,userContext:{country:"Argentina",weightKg:+body.weight||70.4,heightCm:+body.height||184,goal:data.nutritionSettings.goal},savedMeals:data.savedMeals.slice(0,12).map(m=>({name:m.name,calories:m.calories,protein_g:m.protein,carbs_g:m.carbs,fat_g:m.fat}))});
+      const a=result.analysis;
+      pendingMealEstimate={calories:a.calories,protein:a.protein_g,carbs:a.carbs_g,fat:a.fat_g,fiber:a.fiber_g,confidence:a.confidence,confidencePercent:a.confidence_percent,normalizedName:a.normalized_name,estimatedTotalWeight:a.estimated_total_weight_g,items:a.items||[],assumptions:a.assumptions||[],range:a.plausible_range};
+      document.getElementById("estimatedCaloriesPro").value=a.calories;document.getElementById("estimatedProteinPro").value=a.protein_g;document.getElementById("estimatedCarbsPro").value=a.carbs_g;document.getElementById("estimatedFatPro").value=a.fat_g;document.getElementById("aiNormalizedNamePro").textContent=a.normalized_name;document.getElementById("aiExplanationPro").textContent=(a.assumptions||[]).slice(0,3).join(" · ")||"Estimación generada por IA";document.getElementById("aiConfidencePro").textContent=`Confianza ${a.confidence_percent}%`;
+      document.getElementById("aiDetectedItemsPro").innerHTML=(a.items||[]).map(i=>`<div class="ai-item-row"><span>${i.name}${i.estimated_weight_g?` · ${i.estimated_weight_g} g`:""}</span><strong>${i.calories} kcal</strong></div>`).join("");
+      document.getElementById("aiRangeTextPro").textContent=a.plausible_range?`Rango plausible: ${a.plausible_range.calories_min}-${a.plausible_range.calories_max} kcal · proteína ${a.plausible_range.protein_min_g}-${a.plausible_range.protein_max_g} g`:"";
+      document.getElementById("clarificationBoxPro").classList.toggle("show",Boolean(a.clarification_suggestion));document.getElementById("clarificationQuestionPro").textContent=a.clarification_suggestion||"";document.getElementById("aiMealProResult").classList.add("show");
+    }catch(error){toast(error.message||"No se pudo analizar")}finally{button.disabled=false;button.textContent=original}
+  }
+
+  async function reviewNutritionDay() {
+    const button=document.getElementById("reviewNutritionDayBtn");button.disabled=true;button.textContent="Analizando...";
+    try{
+      const result=await callSmartHandler({action:"nutrition_day_review",context:{date:iso(nutritionDate),targets:nutritionTargets(),totals:nutritionTotals(),meals:mealsForDate().map(m=>({type:m.type,description:m.description,calories:m.calories,protein:m.protein,carbs:m.carbs,fat:m.fat})),completed_main_meals:completedMainMeals()}});
+      data.aiInsights.nutrition=data.aiInsights.nutrition||{};data.aiInsights.nutrition[iso(nutritionDate)]=result.review;save();renderNutrition();toast("Análisis actualizado");
+    }catch(error){toast(error.message||"No se pudo analizar el día")}finally{button.disabled=false;button.textContent="Analizar con IA"}
+  }
+
+  async function refreshCoach() {
+    const button=document.getElementById("refreshCoachAIPro");if(button)button.disabled=true;
+    try{
+      const {start,end}=weekRange();
+      const result=await callSmartHandler({action:"coach_insight",context:{date:iso(),profile:{goal:profile.goal},body:latestBody(),nutrition:{targets:nutritionTargets(),today:nutritionTotals(iso())},workouts:sessionsInRange(start,end).map(s=>({date:s.date,status:s.status,volume:volume(s)})),streak:streak(),prime_score:primeScore()}});
+      data.aiInsights.coach={...result.insight,updatedAt:new Date().toISOString()};save();
+      document.getElementById("coachText").textContent=`${result.insight.headline}. ${result.insight.summary}`;toast("Prime Coach actualizado");
+    }catch(error){toast(error.message||"No se pudo actualizar")}finally{if(button)button.disabled=false}
+  }
+
+  function enhanceCoach() {
+    const title=document.querySelector(".coach-title");
+    if(!title||document.getElementById("refreshCoachAIPro"))return;
+    title.insertAdjacentHTML("beforeend",`<button class="slot-action" id="refreshCoachAIPro" style="margin-left:auto">Actualizar IA</button>`);
+    document.getElementById("refreshCoachAIPro").onclick=refreshCoach;
+    if(data.aiInsights.coach)document.getElementById("coachText").textContent=`${data.aiInsights.coach.headline}. ${data.aiInsights.coach.summary}`;
+  }
+
+  // Rutina de 7 días y descansos
+  const originalCreateTodaySession=createTodaySession;
+  createTodaySession=function(){const routine=todayRoutine();if(!routine||routine.mode==="rest")return null;return originalCreateTodaySession()};
+
+  const originalRenderRoutine=renderRoutine;
+  renderRoutine=function(){
+    document.getElementById("routineGrid").innerHTML=data.routine.map((r,i)=>{
+      const isRest=r.mode==="rest",cardio=r.cardio||[];
+      return `<article class="card routine-card ${r.day===new Date().getDay()?"today":""}"><div class="routine-head"><div><div class="routine-name">${r.name}</div><div class="routine-muscle">${r.muscle}</div></div><button class="icon-button" data-edit-day="${i}"><svg><use href="#i-edit"/></svg></button></div>${isRest?`<div class="rest-day-card" style="margin-top:12px"><div class="rest-icon"><svg><use href="#i-rest"/></svg></div><div><div class="row-title">Descanso programado</div><div class="row-sub">Se marca automáticamente en el calendario.</div></div></div>`:`<div class="chips">${r.exercises.filter(e=>e.active!==false).slice(0,5).map(e=>`<span class="chip">${e.name}</span>`).join("")}${cardio.map(c=>`<span class="chip">${c.name} · ${c.minutes} min</span>`).join("")}</div><div class="caption">${r.exercises.length} ejercicios · ${r.exercises.reduce((a,e)=>a+e.sets,0)} series</div>`}</article>`;
+    }).join("");
+    document.querySelectorAll("[data-edit-day]").forEach(btn=>btn.onclick=()=>openRoutinePro(+btn.dataset.editDay));
+  };
+
+  function enhanceRoutineModal() {
+    const modal=document.getElementById("routineModal");if(!modal||modal.dataset.proEnhanced)return;
+    modal.dataset.proEnhanced="1";
+    const grid=modal.querySelector(".form-grid");
+    if(grid)grid.insertAdjacentHTML("beforebegin",`<div class="day-mode-selector"><button class="day-mode-btn" data-pro-day-mode="training">Día de entrenamiento</button><button class="day-mode-btn" data-pro-day-mode="rest">Día de descanso</button></div>`);
+  }
+
+  function openRoutinePro(index) {
+    editingRoutine=index;
+    const r=data.routine[index];r.cardio=r.cardio||[];r.mode=r.mode||"training";
+    document.getElementById("routineModalTitle").textContent=`Editar ${r.name}`;
+    document.getElementById("routineName").value=r.name;document.getElementById("routineMuscle").value=r.muscle;
+    renderRoutineEditor();renderCardioEditor();
+    document.querySelectorAll("[data-pro-day-mode]").forEach(btn=>btn.classList.toggle("active",btn.dataset.proDayMode===r.mode));
+    updateRoutineModeUI();
+    openModal("routineModal");
+  }
+
+  function updateRoutineModeUI() {
+    const rest=document.querySelector("[data-pro-day-mode].active")?.dataset.proDayMode==="rest";
+    document.getElementById("routineEditor").style.display=rest?"none":"block";
+    const cardio=document.getElementById("cardioEditor")?.closest(".cardio-config");if(cardio)cardio.style.display=rest?"none":"block";
+    document.getElementById("addExerciseBtn").style.display=rest?"none":"flex";
+  }
+
+  const originalRenderCalendar=renderCalendar;
+  renderCalendar=function(){
+    originalRenderCalendar();
+    document.querySelectorAll(".day").forEach((cell,index)=>{
+      const y=currentMonth.getFullYear(),m=currentMonth.getMonth(),first=new Date(y,m,1),offset=(first.getDay()+6)%7,d=new Date(y,m,1-offset+index);
+      if(!getSession(iso(d))&&data.routine.find(r=>r.day===d.getDay())?.mode==="rest")cell.classList.add("rest");
+    });
+  };
+
+  function bindProEvents() {
+    document.querySelectorAll("[data-pro-close]").forEach(btn=>btn.onclick=()=>closeModal(btn.dataset.proClose));
+    document.getElementById("nutritionSettingsBtn").onclick=()=>{
+      openNutritionSettings();
+      setTimeout(()=>{
+        const goal=data.nutritionSettings.goal||"maintain";
+        document.querySelectorAll("[data-pro-goal]").forEach(btn=>btn.classList.toggle("active",btn.dataset.proGoal===goal));
+      },0);
+    };
+    document.getElementById("nutritionPrev").onclick=()=>{nutritionDate.setDate(nutritionDate.getDate()-1);renderNutrition()};
+    document.getElementById("nutritionNext").onclick=()=>{nutritionDate.setDate(nutritionDate.getDate()+1);renderNutrition()};
+    document.getElementById("openMealLibraryBtn").onclick=()=>openLibrary("Desayuno");
+    document.getElementById("reviewNutritionDayBtn").onclick=reviewNutritionDay;
+    document.getElementById("analyzeMealProBtn").onclick=()=>analyzeMealPro("");
+    document.getElementById("refineMealProBtn").onclick=()=>analyzeMealPro(document.getElementById("mealClarificationPro").value.trim());
+    document.getElementById("saveMealProBtn").onclick=async()=>{
+      const description=document.getElementById("mealDescriptionPro").value.trim();if(!description||!pendingMealEstimate)return toast("Analizá la comida primero");
+      const meal={id:crypto.randomUUID?.()||String(Date.now()),date:iso(nutritionDate),type:document.getElementById("mealTypePro").value,time:document.getElementById("mealTimePro").value,description,normalizedName:pendingMealEstimate.normalizedName,calories:+document.getElementById("estimatedCaloriesPro").value||0,protein:+document.getElementById("estimatedProteinPro").value||0,carbs:+document.getElementById("estimatedCarbsPro").value||0,fat:+document.getElementById("estimatedFatPro").value||0,fiber:pendingMealEstimate.fiber,confidence:pendingMealEstimate.confidence,confidencePercent:pendingMealEstimate.confidencePercent,estimatedTotalWeight:pendingMealEstimate.estimatedTotalWeight,items:pendingMealEstimate.items,assumptions:pendingMealEstimate.assumptions,source:"ai_estimate"};
+      data.meals.push(meal);
+      if(document.getElementById("saveToLibraryProCheck").checked){
+        const libraryItem={id:crypto.randomUUID?.()||String(Date.now()+1),name:meal.normalizedName||meal.description,calories:meal.calories,protein:meal.protein,carbs:meal.carbs,fat:meal.fat,fiber:meal.fiber,defaultType:meal.type,items:meal.items,source:"ai"};
+        data.savedMeals.push(libraryItem);
+        await saveLibraryItemCloud(libraryItem);
+      }
+      save();await saveMealRecordToCloud(meal);closeModal("mealComposerProModal");renderNutrition();toast("Comida registrada");
+    };
+    document.getElementById("mealLibraryProSearch").oninput=renderLibrary;
+    document.getElementById("newSavedMealProBtn").onclick=()=>{editingSavedMealId=null;["Name","Calories","Protein","Carbs","Fat"].forEach(x=>document.getElementById("savedMealPro"+x).value="");populateType(document.getElementById("savedMealProType"),currentMealSlot);openModal("savedMealProEditorModal")};
+    document.getElementById("saveSavedMealProBtn").onclick=()=>{
+      const item={id:editingSavedMealId||crypto.randomUUID?.()||String(Date.now()),name:document.getElementById("savedMealProName").value.trim(),calories:+document.getElementById("savedMealProCalories").value||0,protein:+document.getElementById("savedMealProProtein").value||0,carbs:+document.getElementById("savedMealProCarbs").value||0,fat:+document.getElementById("savedMealProFat").value||0,defaultType:document.getElementById("savedMealProType").value,source:"manual"};
+      if(!item.name)return toast("Poné un nombre");const idx=data.savedMeals.findIndex(x=>x.id===item.id);if(idx>=0)data.savedMeals[idx]=item;else data.savedMeals.push(item);save();saveLibraryItemCloud(item);closeModal("savedMealProEditorModal");renderLibrary();toast("Plato guardado");
+    };
+    document.querySelectorAll("[data-pro-goal]").forEach(btn=>btn.onclick=()=>{
+      document.querySelectorAll("[data-pro-goal]").forEach(x=>x.classList.remove("active"));btn.classList.add("active");
+      document.getElementById("nutritionGoal").value=btn.dataset.proGoal;renderNutritionGoalPreview();
+    });
+    document.querySelectorAll("[data-pro-day-mode]").forEach(btn=>btn.onclick=()=>{document.querySelectorAll("[data-pro-day-mode]").forEach(x=>x.classList.remove("active"));btn.classList.add("active");updateRoutineModeUI()});
+    const saveRoutineButton=document.getElementById("saveRoutineBtn");
+    saveRoutineButton.onclick=()=>{
+      const r=data.routine[editingRoutine];r.name=document.getElementById("routineName").value.trim()||r.name;r.muscle=document.getElementById("routineMuscle").value.trim()||r.muscle;r.mode=document.querySelector("[data-pro-day-mode].active")?.dataset.proDayMode||"training";save();closeModal("routineModal");renderAll();toast("Rutina actualizada");
+    };
+  }
+
+  ensureProData();
+  addSymbols();
+  buildNutritionUI();
+  addModals();
+  enhanceNutritionSettingsModal();
+  enhanceRoutineModal();
+  enhanceCoach();
+  bindProEvents();
+  save();
+  renderAll();
+})();
+</script>
+
 </body>
 </html>
