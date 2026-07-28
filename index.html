@@ -378,6 +378,7 @@ body.compact .section{padding:13px}body.compact .card{border-radius:20px}body.co
 
 
 .barcode-entry{display:grid;grid-template-columns:1fr auto;gap:8px;margin:10px 0}.barcode-scan-btn{white-space:nowrap}.verified-product-card{display:none;gap:12px;align-items:center;padding:12px;border:1px solid rgba(72,213,190,.35);background:rgba(72,213,190,.08);border-radius:16px;margin:10px 0}.verified-product-card.show{display:flex}.verified-product-card img{width:58px;height:58px;object-fit:contain;border-radius:12px;background:#fff}.verified-product-main{min-width:0;flex:1}.verified-product-main strong,.verified-product-main small{display:block}.verified-product-main strong{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.verified-source{font-size:11px;color:var(--cyan);font-weight:800;text-transform:uppercase;letter-spacing:.06em}.scanner-sheet{max-width:520px}.scanner-stage{position:relative;overflow:hidden;border-radius:20px;background:#02060a;aspect-ratio:3/4;max-height:68vh}.scanner-stage video{width:100%;height:100%;object-fit:cover}.scanner-overlay{position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.48),rgba(0,0,0,.48));pointer-events:none}.scanner-window{position:absolute;left:8%;right:8%;top:37%;height:26%;border:2px solid rgba(255,255,255,.96);border-radius:18px;box-shadow:0 0 0 9999px rgba(0,0,0,.48)}.scanner-window:before,.scanner-window:after{content:"";position:absolute;left:8%;right:8%;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);box-shadow:0 0 12px var(--cyan)}.scanner-window:before{top:48%;animation:scanline 1.7s ease-in-out infinite alternate}.scanner-window:after{display:none}.scanner-hint{position:absolute;left:12px;right:12px;bottom:16px;text-align:center;color:#fff;font-weight:700;text-shadow:0 2px 12px #000}.scanner-status{margin-top:10px;text-align:center}.manual-barcode{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px}@keyframes scanline{from{transform:translateY(-42px)}to{transform:translateY(42px)}}
+.detected-success{display:none;align-items:center;gap:8px;color:#4bd7a7;font-weight:900;margin:8px 0}.detected-success.show{display:flex}.consume-all-box{display:none;align-items:flex-start;gap:10px;padding:12px;border:1px solid rgba(72,213,190,.3);background:rgba(72,213,190,.07);border-radius:14px;margin:10px 0}.consume-all-box.show{display:flex}.consume-all-box input{margin-top:3px}.meal-description-wrap{position:relative}.meal-photo-btn{position:absolute;right:10px;top:10px;width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--card-2);color:var(--text);display:grid;place-items:center;cursor:pointer}.meal-photo-btn svg{width:19px;height:19px}.meal-description-wrap textarea{padding-right:58px}.meal-photo-preview{display:none;gap:10px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:14px;margin-top:8px}.meal-photo-preview.show{display:flex}.meal-photo-preview img{width:68px;height:68px;object-fit:cover;border-radius:12px}.meal-photo-preview div{flex:1}.field:disabled,.btn:disabled{opacity:.48;cursor:not-allowed}
 </style>
 
 <style id="primeNutritionProStyles">
@@ -923,6 +924,7 @@ button:disabled,.btn:disabled{opacity:.56;cursor:not-allowed}
 
 <svg style="display:none">
 <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+<symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4 16 7h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h3l1.5-3h5Z"/><circle cx="12" cy="13" r="4"/></symbol>
 <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 11 9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></symbol>
 <symbol id="i-dumbbell" viewBox="0 0 24 24"><path d="M6 7v10M18 7v10M3 9v6M21 9v6M6 12h12M3 12H1M23 12h-2"/></symbol>
 <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/></symbol>
@@ -1920,6 +1922,8 @@ initializeCloud().finally(()=>{
 
 <script id="primeNutritionSharedState">
 var verifiedProductPro = null;
+var mealPhotoDataPro = null;
+var consumeWholeProductPro = false;
 var barcodeReaderPro = null;
 var barcodeControlsPro = null;
 var barcodeLookupBusyPro = false;
@@ -2016,10 +2020,13 @@ var barcodeLookupBusyPro = false;
       <div class="modal" id="mealComposerProModal"><div class="sheet">
         <div class="sheet-head"><div><div class="sheet-title" id="mealComposerTitle">Agregar comida</div><div class="caption">Describí libremente la comida y la IA la descompone</div></div><button class="icon-button" data-pro-close="mealComposerProModal"><svg><use href="#i-x"/></svg></button></div>
         <div class="heading-row"><h2 class="heading"><svg style="color:#c58cff"><use href="#i-brain"/></svg>ANÁLISIS PRECISO</h2><span class="ai-connection loading" id="aiModeBadgePro">Comprobando IA...</span></div>
-        <div class="barcode-entry"><input class="field" id="barcodeManualPro" inputmode="numeric" placeholder="Código de barras del producto"><button class="btn btn-soft barcode-scan-btn" id="openBarcodeScannerProBtn">Escanear</button></div>
-        <div class="verified-product-card" id="verifiedProductCardPro"><img id="verifiedProductImagePro" alt=""><div class="verified-product-main"><span class="verified-source">Producto detectado</span><strong id="verifiedProductNamePro"></strong><small id="verifiedProductNutritionPro"></small></div><button class="icon-button" id="clearVerifiedProductProBtn" title="Quitar producto"><svg><use href="#i-x"/></svg></button></div>
-        <div class="row-sub" style="margin-bottom:7px">Después de detectar el producto, describí solamente cuánto consumiste. Ejemplo: “tomé un vaso” o “comí dos unidades”.</div>
-        <textarea class="field meal-textarea" id="mealDescriptionPro" placeholder="Ejemplo: tomé un vaso / comí dos unidades / usé 150 ml..."></textarea>
+        <div class="barcode-entry" id="barcodeEntryPro"><input class="field" id="barcodeManualPro" inputmode="numeric" placeholder="Código de barras del producto"><button class="btn btn-soft barcode-scan-btn" id="openBarcodeScannerProBtn">Escanear</button></div>
+        <div class="detected-success" id="detectedSuccessPro"><svg style="width:18px;height:18px"><use href="#i-check"/></svg> Alimento detectado</div>
+        <div class="verified-product-card" id="verifiedProductCardPro"><img id="verifiedProductImagePro" alt=""><div class="verified-product-main"><span class="verified-source">Información nutricional real</span><strong id="verifiedProductNamePro"></strong><small id="verifiedProductNutritionPro"></small></div><button class="icon-button" id="clearVerifiedProductProBtn" title="Quitar producto"><svg><use href="#i-x"/></svg></button></div>
+        <label class="consume-all-box" id="consumeAllBoxPro"><input type="checkbox" id="consumeWholeProductPro"><div><strong>Consumí todo el producto</strong><div class="row-sub">Calcula automáticamente el total del envase y desactiva el análisis por texto.</div></div></label>
+        <div class="row-sub" id="mealDescriptionHelpPro" style="margin-bottom:7px">Después de detectar el producto, describí solamente cuánto consumiste. Para alimentos naturales, describilos y agregá una foto para mejorar el cálculo visual.</div>
+        <div class="meal-description-wrap"><textarea class="field meal-textarea" id="mealDescriptionPro" placeholder="Ejemplo: tomé un vaso / comí dos unidades / pechuga con arroz..."></textarea><button class="meal-photo-btn" id="mealPhotoBtnPro" title="Sacar foto del alimento"><svg><use href="#i-camera"/></svg></button><input id="mealPhotoInputPro" type="file" accept="image/*" capture="environment" hidden></div>
+        <div class="meal-photo-preview" id="mealPhotoPreviewPro"><img id="mealPhotoImagePro" alt="Foto de la comida"><div><strong>Foto agregada</strong><div class="row-sub">La IA usará texto e imagen para estimar tamaño, ingredientes y porción.</div></div><button class="icon-button" id="clearMealPhotoProBtn"><svg><use href="#i-x"/></svg></button></div>
         <div class="form-grid" style="margin-top:9px"><div class="form-group"><label>Comida</label><select class="field" id="mealTypePro"></select></div><div class="form-group"><label>Hora</label><input class="field" id="mealTimePro" type="time"></div></div>
         <button class="btn btn-primary" id="analyzeMealProBtn" style="width:100%;margin-top:10px"><svg><use href="#i-spark"/></svg>Analizar con IA</button>
         <div class="ai-result" id="aiMealProResult">
@@ -2143,7 +2150,10 @@ var barcodeLookupBusyPro = false;
     currentMealSlot = slot;
     pendingMealEstimate = null;
     verifiedProductPro = null;
+    mealPhotoDataPro = null;
+    consumeWholeProductPro = false;
     renderVerifiedProductPro();
+    renderMealPhotoPro();
     document.getElementById("barcodeManualPro").value = "";
     document.getElementById("mealComposerTitle").textContent = `Agregar ${slot.toLowerCase()}`;
     populateType(document.getElementById("mealTypePro"),slot);
@@ -2233,7 +2243,36 @@ var barcodeLookupBusyPro = false;
     const img=document.getElementById("verifiedProductImagePro");
     img.src=verifiedProductPro.image_url||"";img.style.display=verifiedProductPro.image_url?"block":"none";
     document.getElementById("barcodeManualPro").value=verifiedProductPro.barcode||"";
+    document.getElementById("detectedSuccessPro")?.classList.add("show");
+    document.getElementById("consumeAllBoxPro")?.classList.add("show");
+    document.getElementById("barcodeEntryPro")?.style.setProperty("display","none");
+    updateConsumeWholeProductPro();
   }
+
+  function parsePackageAmountPro(label){
+    const text=String(label||"").toLowerCase().replace(",",".");
+    const m=text.match(/([0-9]+(?:\.[0-9]+)?)\s*(kg|g|ml|l)\b/);if(!m)return null;
+    let value=Number(m[1]);const unit=m[2];if(unit==="kg"||unit==="l")value*=1000;
+    return {value,unit:(unit==="ml"||unit==="l")?"ml":"g"};
+  }
+  function fullProductEstimatePro(){
+    if(!verifiedProductPro)return null;const pkg=parsePackageAmountPro(verifiedProductPro.quantity_label);
+    if(!pkg||verifiedProductPro.calories_100g==null)return null;const factor=pkg.value/100;
+    const val=k=>verifiedProductPro[k]==null?0:Math.round(verifiedProductPro[k]*factor*10)/10;
+    return {calories:Math.round(verifiedProductPro.calories_100g*factor),protein:val("protein_100g"),carbs:val("carbs_100g"),fat:val("fat_100g"),fiber:verifiedProductPro.fiber_100g==null?null:val("fiber_100g"),weight:pkg.value,unit:pkg.unit};
+  }
+  function updateConsumeWholeProductPro(){
+    const checked=Boolean(document.getElementById("consumeWholeProductPro")?.checked&&verifiedProductPro);consumeWholeProductPro=checked;
+    const desc=document.getElementById("mealDescriptionPro"),analyze=document.getElementById("analyzeMealProBtn"),photo=document.getElementById("mealPhotoBtnPro");
+    if(desc){desc.disabled=checked;desc.placeholder=checked?"No hace falta describir: se usará el total del envase.":"Ejemplo: tomé un vaso / comí dos unidades / pechuga con arroz...";if(checked)desc.value=`Consumí todo el producto: ${verifiedProductPro.name}`}
+    if(analyze)analyze.disabled=checked;if(photo)photo.disabled=checked;
+    if(checked){const e=fullProductEstimatePro();if(!e){document.getElementById("consumeWholeProductPro").checked=false;consumeWholeProductPro=false;return toast("Este producto no informa el contenido total del envase con suficiente precisión")}
+      pendingMealEstimate={calories:e.calories,protein:e.protein,carbs:e.carbs,fat:e.fat,fiber:e.fiber,confidence:"high",confidencePercent:99,normalizedName:verifiedProductPro.name,estimatedTotalWeight:e.weight,items:[{component:"Producto completo",name:verifiedProductPro.name,estimated_weight_g:e.weight,calories:e.calories,protein_g:e.protein,carbs_g:e.carbs,fat_g:e.fat,confidence:"high",confidence_percent:99}],assumptions:["Se consumió el envase completo según el contenido declarado"],range:{calories_min:e.calories,calories_max:e.calories,protein_min_g:e.protein,protein_max_g:e.protein}};
+      document.getElementById("estimatedCaloriesPro").value=e.calories;document.getElementById("estimatedProteinPro").value=e.protein;document.getElementById("estimatedCarbsPro").value=e.carbs;document.getElementById("estimatedFatPro").value=e.fat;document.getElementById("aiNormalizedNamePro").textContent=verifiedProductPro.name;document.getElementById("aiExplanationPro").textContent=`Total exacto del envase declarado: ${e.weight} ${e.unit}`;document.getElementById("aiConfidencePro").textContent="Datos del envase";document.getElementById("aiDetectedItemsPro").innerHTML=`<div class="component-item"><div><strong>${verifiedProductPro.name}</strong><small>Producto completo</small></div><div style="text-align:right"><strong>${e.weight} ${e.unit}</strong><small>${e.calories} kcal</small></div></div>`;document.getElementById("aiRangeTextPro").textContent="Cálculo directo, sin estimación de IA";document.getElementById("clarificationBoxPro").classList.remove("show");document.getElementById("aiMealProResult").classList.add("show");
+    } else if(desc){desc.disabled=false;if(desc.value.startsWith("Consumí todo el producto:"))desc.value=""}
+  }
+  function renderMealPhotoPro(){const box=document.getElementById("mealPhotoPreviewPro"),img=document.getElementById("mealPhotoImagePro");if(!box)return;box.classList.toggle("show",Boolean(mealPhotoDataPro));if(mealPhotoDataPro)img.src=mealPhotoDataPro}
+  function readMealPhotoPro(file){if(!file)return; if(file.size>7*1024*1024)return toast("La foto es demasiado pesada");const reader=new FileReader();reader.onload=()=>{mealPhotoDataPro=String(reader.result);renderMealPhotoPro()};reader.readAsDataURL(file)}
 
   async function lookupBarcodePro(code){
     const barcode=String(code||"").replace(/\D/g,"");
@@ -2300,10 +2339,10 @@ var barcodeLookupBusyPro = false;
     const original=button.textContent;button.disabled=true;button.textContent="Analizando...";
     try{
       const body=latestBody()||{};
-      const result=await callSmartHandler({action:"analyze_meal",description,mealType:document.getElementById("mealTypePro").value,clarification,userContext:{country:"Argentina",weightKg:+body.weight||70.4,heightCm:+body.height||184,goal:data.nutritionSettings.goal},savedMeals:(data.savedMeals||[]).slice(0,12).map(m=>({name:m.name,calories:m.calories,protein_g:m.protein,carbs_g:m.carbs,fat_g:m.fat})),verifiedProduct:verifiedProductPro});
+      const result=await callSmartHandler({action:"analyze_meal",description,mealType:document.getElementById("mealTypePro").value,clarification,userContext:{country:"Argentina",weightKg:+body.weight||70.4,heightCm:+body.height||184,goal:data.nutritionSettings.goal},savedMeals:(data.savedMeals||[]).slice(0,12).map(m=>({name:m.name,calories:m.calories,protein_g:m.protein,carbs_g:m.carbs,fat_g:m.fat})),verifiedProduct:verifiedProductPro,imageDataUrl:mealPhotoDataPro});
       const a=result.analysis;
       pendingMealEstimate={calories:a.calories,protein:a.protein_g,carbs:a.carbs_g,fat:a.fat_g,fiber:a.fiber_g,confidence:a.confidence,confidencePercent:a.confidence_percent,normalizedName:a.normalized_name,estimatedTotalWeight:a.estimated_total_weight_g,items:a.items||[],components:a.components||[],detectedModifiers:a.detected_modifiers||[],assumptions:a.assumptions||[],range:a.plausible_range};
-      document.getElementById("estimatedCaloriesPro").value=a.calories;document.getElementById("estimatedProteinPro").value=a.protein_g;document.getElementById("estimatedCarbsPro").value=a.carbs_g;document.getElementById("estimatedFatPro").value=a.fat_g;document.getElementById("aiNormalizedNamePro").textContent=a.normalized_name;document.getElementById("aiExplanationPro").textContent=verifiedProductPro?`Datos reales del producto por código de barras · ${(a.assumptions||[]).slice(0,2).join(" · ")}`:((a.assumptions||[]).slice(0,3).join(" · ")||"Estimación generada por IA");document.getElementById("aiConfidencePro").textContent=`Confianza ${a.confidence_percent}%`;
+      document.getElementById("estimatedCaloriesPro").value=a.calories;document.getElementById("estimatedProteinPro").value=a.protein_g;document.getElementById("estimatedCarbsPro").value=a.carbs_g;document.getElementById("estimatedFatPro").value=a.fat_g;document.getElementById("aiNormalizedNamePro").textContent=a.normalized_name;document.getElementById("aiExplanationPro").textContent=verifiedProductPro?`Datos reales del producto por código de barras · ${(a.assumptions||[]).slice(0,2).join(" · ")}`:((mealPhotoDataPro?"Análisis combinado de descripción + imagen · ":"")+((a.assumptions||[]).slice(0,3).join(" · ")||"Estimación generada por IA"));document.getElementById("aiConfidencePro").textContent=`Confianza ${a.confidence_percent}%`;
       {
         const grouped={};
         (a.items||[]).forEach(item=>{const key=item.component||"Comida";(grouped[key]??=[]).push(item)});
@@ -2414,12 +2453,16 @@ var barcodeLookupBusyPro = false;
     document.getElementById("closeBarcodeScannerProBtn").onclick=async()=>{await stopBarcodeScannerPro();closeModal("barcodeScannerProModal")};
     document.getElementById("lookupManualBarcodeProBtn").onclick=()=>lookupBarcodePro(document.getElementById("scannerManualCodePro").value);
     document.getElementById("barcodeManualPro").addEventListener("change",event=>lookupBarcodePro(event.target.value));
-    document.getElementById("clearVerifiedProductProBtn").onclick=()=>{verifiedProductPro=null;renderVerifiedProductPro();document.getElementById("barcodeManualPro").value=""};
+    document.getElementById("clearVerifiedProductProBtn").onclick=()=>{verifiedProductPro=null;consumeWholeProductPro=false;document.getElementById("consumeWholeProductPro").checked=false;document.getElementById("verifiedProductCardPro").classList.remove("show");document.getElementById("detectedSuccessPro").classList.remove("show");document.getElementById("consumeAllBoxPro").classList.remove("show");document.getElementById("barcodeEntryPro").style.display="grid";document.getElementById("barcodeManualPro").value="";updateConsumeWholeProductPro()};
+    document.getElementById("consumeWholeProductPro").onchange=updateConsumeWholeProductPro;
+    document.getElementById("mealPhotoBtnPro").onclick=()=>document.getElementById("mealPhotoInputPro").click();
+    document.getElementById("mealPhotoInputPro").onchange=e=>readMealPhotoPro(e.target.files?.[0]);
+    document.getElementById("clearMealPhotoProBtn").onclick=()=>{mealPhotoDataPro=null;document.getElementById("mealPhotoInputPro").value="";renderMealPhotoPro()};
     document.getElementById("analyzeMealProBtn").onclick=()=>analyzeMealPro("");
     document.getElementById("refineMealProBtn").onclick=()=>analyzeMealPro(document.getElementById("mealClarificationPro").value.trim());
     document.getElementById("saveMealProBtn").onclick=async()=>{
       const description=document.getElementById("mealDescriptionPro").value.trim();if(!description||!pendingMealEstimate)return toast("Analizá la comida primero");
-      const meal={id:crypto.randomUUID?.()||String(Date.now()),date:iso(nutritionDate),type:document.getElementById("mealTypePro").value,time:document.getElementById("mealTimePro").value,description,normalizedName:pendingMealEstimate.normalizedName,calories:+document.getElementById("estimatedCaloriesPro").value||0,protein:+document.getElementById("estimatedProteinPro").value||0,carbs:+document.getElementById("estimatedCarbsPro").value||0,fat:+document.getElementById("estimatedFatPro").value||0,fiber:pendingMealEstimate.fiber,confidence:pendingMealEstimate.confidence,confidencePercent:pendingMealEstimate.confidencePercent,estimatedTotalWeight:pendingMealEstimate.estimatedTotalWeight,items:pendingMealEstimate.items,assumptions:pendingMealEstimate.assumptions,source:verifiedProductPro?"barcode_verified":"ai_estimate",verifiedProduct:verifiedProductPro};
+      const meal={id:crypto.randomUUID?.()||String(Date.now()),date:iso(nutritionDate),type:document.getElementById("mealTypePro").value,time:document.getElementById("mealTimePro").value,description,normalizedName:pendingMealEstimate.normalizedName,calories:+document.getElementById("estimatedCaloriesPro").value||0,protein:+document.getElementById("estimatedProteinPro").value||0,carbs:+document.getElementById("estimatedCarbsPro").value||0,fat:+document.getElementById("estimatedFatPro").value||0,fiber:pendingMealEstimate.fiber,confidence:pendingMealEstimate.confidence,confidencePercent:pendingMealEstimate.confidencePercent,estimatedTotalWeight:pendingMealEstimate.estimatedTotalWeight,items:pendingMealEstimate.items,assumptions:pendingMealEstimate.assumptions,source:verifiedProductPro?"barcode_verified":(mealPhotoDataPro?"ai_visual_estimate":"ai_estimate"),verifiedProduct:verifiedProductPro,hasMealPhoto:Boolean(mealPhotoDataPro),consumedWholeProduct:consumeWholeProductPro};
       data.meals.push(meal);
       if(document.getElementById("saveToLibraryProCheck").checked){
         const libraryItem={id:crypto.randomUUID?.()||String(Date.now()+1),name:meal.normalizedName||meal.description,calories:meal.calories,protein:meal.protein,carbs:meal.carbs,fat:meal.fat,fiber:meal.fiber,defaultType:meal.type,items:meal.items,source:"ai"};
@@ -3248,8 +3291,8 @@ window.addEventListener("load",()=>{
         estimatedTotalWeight:pendingMealEstimate.estimatedTotalWeight,
         items:pendingMealEstimate.items||[],
         assumptions:pendingMealEstimate.assumptions||[],
-        source:verifiedProductPro?"barcode_verified":"ai_estimate",
-        verifiedProduct:verifiedProductPro
+        source:verifiedProductPro?"barcode_verified":(mealPhotoDataPro?"ai_visual_estimate":"ai_estimate"),
+        verifiedProduct:verifiedProductPro,hasMealPhoto:Boolean(mealPhotoDataPro),consumedWholeProduct:consumeWholeProductPro
       };
       const saveLibrary=document.getElementById("saveToLibraryProCheck").checked;
       const ok=await mutateAndCommit(()=>{
