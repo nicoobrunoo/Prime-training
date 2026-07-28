@@ -1918,6 +1918,12 @@ initializeCloud().finally(()=>{
 });
 </script>
 
+<script id="primeNutritionSharedState">
+var verifiedProductPro = null;
+var barcodeReaderPro = null;
+var barcodeControlsPro = null;
+var barcodeLookupBusyPro = false;
+</script>
 <script id="primeNutritionProScript">
 (() => {
   "use strict";
@@ -2650,6 +2656,11 @@ initializeCloud().finally(()=>{
     if(event.target?.id==="mealTypePro")updateComposerGuidance();
   });
 
+  window.renderVerifiedProductPro = renderVerifiedProductPro;
+  window.lookupBarcodePro = lookupBarcodePro;
+  window.stopBarcodeScannerPro = stopBarcodeScannerPro;
+  window.startBarcodeScannerPro = startBarcodeScannerPro;
+
   ensureWorkoutTimes();
   addWorkoutTimeField();
   addComposerGuidance();
@@ -2673,10 +2684,6 @@ initializeCloud().finally(()=>{
   const REQUIRED_MEALS = window.PRIME_REQUIRED_MEALS || ["Desayuno","Almuerzo","Merienda","Cena"];
   window.PRIME_MEAL_SLOTS = MEAL_SLOTS;
   window.PRIME_REQUIRED_MEALS = REQUIRED_MEALS;
-  let verifiedProductPro = null;
-  let barcodeReaderPro = null;
-  let barcodeControlsPro = null;
-  let barcodeLookupBusyPro = false;
 
 
   function readinessContext(){
@@ -3241,7 +3248,8 @@ window.addEventListener("load",()=>{
         estimatedTotalWeight:pendingMealEstimate.estimatedTotalWeight,
         items:pendingMealEstimate.items||[],
         assumptions:pendingMealEstimate.assumptions||[],
-        source:"ai_estimate"
+        source:verifiedProductPro?"barcode_verified":"ai_estimate",
+        verifiedProduct:verifiedProductPro
       };
       const saveLibrary=document.getElementById("saveToLibraryProCheck").checked;
       const ok=await mutateAndCommit(()=>{
