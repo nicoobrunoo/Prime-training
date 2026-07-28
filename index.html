@@ -4216,5 +4216,185 @@ button,.nav,.icon-button,.avatar-button{touch-action:manipulation}
 })();
 </script>
 
+
+<style id="primeIOSPolishV2">
+/* Scroll aislado para sheets/drawer: el fondo nunca recibe el gesto. */
+html.overlay-open,html.overlay-open body{overscroll-behavior:none}
+body.overlay-locked{position:fixed!important;left:0;right:0;width:100%;overflow:hidden!important}
+.modal{overscroll-behavior:none;touch-action:none}
+.modal .sheet,.drawer{
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  touch-action:pan-y;
+  scrollbar-width:none;
+  will-change:transform;
+}
+.modal .sheet::-webkit-scrollbar,.drawer::-webkit-scrollbar{display:none}
+.modal .sheet{padding-bottom:max(22px,env(safe-area-inset-bottom));transform-origin:50% 100%}
+.drawer{padding-top:max(18px,calc(env(safe-area-inset-top) + 12px));padding-bottom:max(22px,env(safe-area-inset-bottom));transform-origin:0 50%}
+.scroll-edge-bounce{transition:transform .32s cubic-bezier(.22,1,.36,1)!important}
+
+/* Editor visual de ejercicios */
+.exercise-media-editor{grid-column:1/-1;display:grid;grid-template-columns:104px 1fr;gap:12px;align-items:center;padding:11px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.025)}
+.exercise-media-preview{height:92px;border-radius:15px;overflow:hidden;background:linear-gradient(145deg,#182a3d,#0c1724);border:1px solid #2b4359;display:grid;place-items:center;color:var(--muted);position:relative}
+.exercise-media-preview img{width:100%;height:100%;object-fit:cover;display:block}
+.exercise-media-preview svg{width:28px;height:28px;opacity:.7}
+.exercise-media-copy strong{display:block;font-size:.82rem;margin-bottom:4px}.exercise-media-copy p{margin:0 0 9px;color:var(--muted);font-size:.68rem;line-height:1.4}
+.exercise-media-actions{display:flex;gap:7px;flex-wrap:wrap}.exercise-media-actions .btn{min-height:36px;padding:8px 10px;font-size:.68rem}
+
+/* Guía visual dentro del entrenamiento */
+.ai-exercise-guide{margin:14px 0 12px;border-radius:22px;overflow:hidden;border:1px solid #2c4359;background:#0a1522;position:relative;isolation:isolate;animation:guideReveal .46s cubic-bezier(.2,.85,.25,1) both}
+.ai-exercise-guide img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;transform:scale(1.01)}
+.ai-exercise-guide:after{content:"Guía visual";position:absolute;left:12px;bottom:10px;padding:6px 9px;border-radius:999px;background:rgba(5,12,20,.72);backdrop-filter:blur(12px);font-size:.62rem;font-weight:850;color:#fff;border:1px solid rgba(255,255,255,.12)}
+.ai-exercise-guide-placeholder{min-height:148px;display:grid;place-items:center;text-align:center;padding:22px;color:var(--muted);background:radial-gradient(circle at 50% 15%,rgba(139,92,246,.16),transparent 50%)}
+.ai-exercise-guide-placeholder svg{width:34px;height:34px;margin-bottom:8px;color:#a47cff}.ai-exercise-guide-placeholder strong{display:block;color:var(--text);font-size:.8rem;margin-bottom:4px}.ai-exercise-guide-placeholder span{font-size:.66rem}
+
+/* Microinteracciones iOS más suaves */
+.page.active{animation:iosPageEnter .38s cubic-bezier(.2,.8,.2,1) both}
+.card,.routine-card,.ai-main-card,.nutrition-dashboard,.report-metric{transition:transform .28s cubic-bezier(.2,.8,.2,1),border-color .25s ease,box-shadow .25s ease}
+button,.btn,.nav,.ai-quick,.ai-exercise-tab{-webkit-tap-highlight-color:transparent;transform:translateZ(0)}
+button:active,.btn:active,.ai-quick:active{transform:scale(.965)}
+.ai-exercise-tab.active{animation:iosTabSelect .35s cubic-bezier(.2,.9,.25,1)}
+.ai-set-row.done{animation:setComplete .42s cubic-bezier(.2,.9,.25,1)}
+@keyframes guideReveal{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes iosPageEnter{from{opacity:0;transform:translate3d(10px,5px,0) scale(.995)}to{opacity:1;transform:none}}
+@keyframes iosTabSelect{0%{transform:scale(.92)}65%{transform:scale(1.055)}100%{transform:scale(1)}}
+@keyframes setComplete{0%{transform:scale(.985)}55%{transform:scale(1.012)}100%{transform:scale(1)}}
+@media(max-width:430px){.exercise-media-editor{grid-template-columns:88px 1fr}.exercise-media-preview{height:84px}.ai-exercise-guide img{aspect-ratio:1.7}}
+@media(prefers-reduced-motion:reduce){.page.active,.ai-exercise-guide,.ai-exercise-tab.active,.ai-set-row.done{animation:none!important}}
+</style>
+<script id="primeIOSPolishV2Script">
+(()=>{
+  'use strict';
+  let lockedY=0;
+  const root=document.documentElement;
+  const body=document.body;
+  const anyOverlayOpen=()=>!!document.querySelector('.modal.open,.drawer.open');
+  function lockBackground(){
+    if(body.classList.contains('overlay-locked'))return;
+    lockedY=window.scrollY||document.documentElement.scrollTop||0;
+    body.style.top=`-${lockedY}px`;
+    body.classList.add('overlay-locked');
+    root.classList.add('overlay-open');
+  }
+  function unlockBackground(){
+    if(!body.classList.contains('overlay-locked')||anyOverlayOpen())return;
+    body.classList.remove('overlay-locked');
+    root.classList.remove('overlay-open');
+    body.style.top='';
+    window.scrollTo(0,lockedY);
+  }
+  function syncOverlayLock(){anyOverlayOpen()?lockBackground():unlockBackground()}
+
+  const oldOpenModal=window.openModal;
+  const oldCloseModal=window.closeModal;
+  window.openModal=function(id){oldOpenModal?.(id);requestAnimationFrame(syncOverlayLock)};
+  window.closeModal=function(id){oldCloseModal?.(id);requestAnimationFrame(syncOverlayLock)};
+  const observer=new MutationObserver(syncOverlayLock);
+  document.querySelectorAll('.modal,.drawer').forEach(el=>observer.observe(el,{attributes:true,attributeFilter:['class']}));
+
+  // Impide que un gesto dentro de un overlay se transfiera al documento.
+  function installScrollGuard(container){
+    let startY=0,lastPull=0;
+    container.addEventListener('touchstart',e=>{startY=e.touches[0]?.clientY||0;lastPull=0;container.classList.remove('scroll-edge-bounce')},{passive:true});
+    container.addEventListener('touchmove',e=>{
+      const y=e.touches[0]?.clientY||0,dy=y-startY;
+      const atTop=container.scrollTop<=0;
+      const atBottom=Math.ceil(container.scrollTop+container.clientHeight)>=container.scrollHeight;
+      if((atTop&&dy>0)||(atBottom&&dy<0)){
+        e.preventDefault();
+        lastPull=Math.max(-14,Math.min(14,dy*.16));
+        container.style.transform=`translate3d(0,${lastPull}px,0) scale(${1-Math.min(0.008,Math.abs(lastPull)/1700)})`;
+      }
+    },{passive:false});
+    const release=()=>{
+      if(!lastPull)return;
+      container.classList.add('scroll-edge-bounce');
+      container.style.transform='';
+      setTimeout(()=>container.classList.remove('scroll-edge-bounce'),340);
+      lastPull=0;
+    };
+    container.addEventListener('touchend',release,{passive:true});
+    container.addEventListener('touchcancel',release,{passive:true});
+  }
+  document.querySelectorAll('.sheet,.drawer').forEach(installScrollGuard);
+  document.querySelectorAll('.modal').forEach(modal=>modal.addEventListener('touchmove',e=>{
+    if(!e.target.closest('.sheet'))e.preventDefault();
+  },{passive:false}));
+
+  function escapeAttr(value=''){return String(value).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
+  async function compressImage(file){
+    if(!file?.type?.startsWith('image/'))throw new Error('Seleccioná una imagen válida');
+    if(file.size>12*1024*1024)throw new Error('La imagen supera los 12 MB');
+    const bitmap=await createImageBitmap(file);
+    const max=1280,scale=Math.min(1,max/Math.max(bitmap.width,bitmap.height));
+    const canvas=document.createElement('canvas');canvas.width=Math.round(bitmap.width*scale);canvas.height=Math.round(bitmap.height*scale);
+    canvas.getContext('2d',{alpha:false}).drawImage(bitmap,0,0,canvas.width,canvas.height);
+    bitmap.close?.();
+    return canvas.toDataURL('image/jpeg',.82);
+  }
+  window.pickExerciseImage=async function(index,input){
+    const file=input.files?.[0];if(!file)return;
+    try{
+      const image=await compressImage(file);
+      const ex=data.routine?.[editingRoutine]?.exercises?.[index];if(!ex)return;
+      ex.image=image;
+      renderRoutineEditor();
+    }catch(err){alert(err.message||'No se pudo procesar la imagen')}
+  };
+  window.removeExerciseImage=function(index){
+    const ex=data.routine?.[editingRoutine]?.exercises?.[index];if(!ex)return;
+    ex.image='';renderRoutineEditor();
+  };
+
+  // Editor completo con carga de imagen por ejercicio.
+  window.renderRoutineEditor=function(){
+    const routine=data.routine?.[editingRoutine],editor=document.getElementById('routineEditor');if(!routine||!editor)return;
+    editor.innerHTML=(routine.exercises||[]).map((exercise,index)=>`
+      <div class="spark-card routine-exercise-editor" data-exercise-index="${index}" style="margin-bottom:10px">
+        <div class="form-grid">
+          <div class="form-group" style="grid-column:1/-1"><label>Ejercicio</label><input class="field" data-field="name" value="${escapeAttr(exercise.name||'')}"></div>
+          <div class="exercise-media-editor">
+            <div class="exercise-media-preview">${exercise.image?`<img src="${exercise.image}" alt="Guía de ${escapeAttr(exercise.name||'ejercicio')}">`:`<svg><use href="#i-camera"/></svg>`}</div>
+            <div class="exercise-media-copy"><strong>Imagen guía</strong><p>Se mostrará durante el entrenamiento para recordar la técnica y la posición.</p><div class="exercise-media-actions"><label class="btn btn-soft">${exercise.image?'Cambiar':'Agregar imagen'}<input hidden type="file" accept="image/*" onchange="pickExerciseImage(${index},this)"></label>${exercise.image?`<button type="button" class="btn btn-secondary" onclick="removeExerciseImage(${index})">Quitar</button>`:''}</div></div>
+          </div>
+          <div class="form-group"><label>Series</label><input class="field" data-field="sets" type="number" min="1" value="${exercise.sets||1}"></div>
+          <div class="form-group"><label>Peso sugerido (kg)</label><input class="field" data-field="weight" type="number" step=".5" value="${exercise.weight||0}"></div>
+          <div class="form-group"><label>Repeticiones mínimas</label><input class="field" data-field="minReps" type="number" min="1" value="${exercise.minReps||1}"></div>
+          <div class="form-group"><label>Repeticiones máximas</label><input class="field" data-field="maxReps" type="number" min="1" value="${exercise.maxReps||1}"></div>
+          <div class="form-group" style="grid-column:1/-1"><label>Descanso entre series (segundos)</label><input class="field" data-field="rest" type="number" min="15" step="5" value="${exercise.rest||90}"></div>
+        </div>
+        <button class="btn btn-danger" onclick="deleteRoutineExercise(${index})" style="width:100%;margin-top:9px">Eliminar ejercicio</button>
+      </div>`).join('');
+  };
+
+  // Las sesiones nuevas heredan la imagen; las ya iniciadas la recuperan por ID.
+  const oldCreateTodaySession=window.createTodaySession;
+  window.createTodaySession=function(){
+    const session=oldCreateTodaySession?.();
+    const routine=todayRoutine?.();
+    session?.exercises?.forEach(ex=>{const source=routine?.exercises?.find(r=>r.id===ex.id);if(source?.image)ex.image=source.image});
+    return session;
+  };
+  function currentExerciseImage(){
+    const session=getSession?.();if(!session)return '';
+    const tabs=[...document.querySelectorAll('.ai-exercise-tab')];
+    const index=Math.max(0,tabs.findIndex(x=>x.classList.contains('active')));
+    const ex=session.exercises?.[index];
+    return ex?.image||data.routine?.flatMap(r=>r.exercises||[]).find(r=>r.id===ex?.id)?.image||'';
+  }
+  const previousRenderWorkout=window.renderWorkout;
+  window.renderWorkout=function(){
+    previousRenderWorkout?.();
+    const head=document.querySelector('#workoutExercises .ai-main-card .ai-ex-head');if(!head)return;
+    const image=currentExerciseImage();
+    const guide=document.createElement('div');guide.className='ai-exercise-guide';
+    guide.innerHTML=image?`<img src="${image}" alt="Imagen guía del ejercicio">`:`<div class="ai-exercise-guide-placeholder"><div><svg><use href="#i-camera"/></svg><strong>Sin imagen guía</strong><span>Podés agregarla desde la configuración de la rutina.</span></div></div>`;
+    head.insertAdjacentElement('afterend',guide);
+  };
+  if(getSession?.())window.renderWorkout();
+})();
+</script>
+
 </body>
 </html>
