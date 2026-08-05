@@ -1,0 +1,9 @@
+PRIME TRAINING 3.3 — IA CORREGIDA
+
+1. Reemplazar index.html, manifest.json y sw.js en GitHub.
+2. Reemplazar y desplegar smart-handler.ts en Supabase Edge Functions.
+3. Probar en Postman con POST y body: {"action":"expert_chat","messages":[{"role":"user","content":"hola"}],"context":{}}
+4. Debe devolver {"ok":true,"answer":"..."}.
+5. Eliminar la PWA anterior o borrar los datos del sitio para evitar el service worker viejo.
+
+La nueva interfaz muestra errores reales de conexión dentro del chat y mantiene siempre visibles enviar, historial y eliminar conversación.
