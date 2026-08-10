@@ -1,0 +1,20 @@
+PRIME TRAINING 6.0 — IA PERSONAL TRAINER
+
+1. En Supabase > SQL Editor, ejecutar completo `supabase/prime-training-setup.sql`.
+   - Conserva la tabla `prime_shared_state`.
+   - Crea el bucket público `prime-physique` para las fotos.
+2. En Edge Functions, reemplazar el contenido de `smart-handler` por `supabase/smart-handler.ts` y desplegar.
+3. No cambiar los secrets que ya funcionan: GEAI_APITOKEN, GEAI_MODEL y GEAI_API_URL.
+4. Publicar TODO el contenido del proyecto manteniendo las carpetas.
+5. Reemplazar `sw.js`, borrar caché/datos del sitio y volver a agregar la PWA en iPhone.
+
+PRUEBA RÁPIDA
+- Abrir Inicio por la mañana: debe ofrecer el check-in visual.
+- Subir una foto y analizarla.
+- Revisar Inicio > Tu mapa corporal.
+- Abrir Calendario y tocar el día: la foto debe aparecer debajo de los datos.
+- Configurar Modo Físico Objetivo y analizar una referencia.
+- Generar un reporte diario: debe incluir el check-in visual cuando exista.
+
+NOTA
+Los índices visuales son orientativos y sirven para tendencias. No son porcentajes anatómicos ni mediciones clínicas.
